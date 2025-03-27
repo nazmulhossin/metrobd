@@ -27,13 +27,12 @@ body {
 
     .navbar-brand, .offcanvas-title {
         img {
-            height: 30px;
+            height: 27px;
         }
         
         span {
             font-weight: 700;
             color: var(--primary-color);
-            margin-left: 5px;
         }
     }
 
@@ -57,9 +56,15 @@ body {
 
         .badge {
             position: absolute;
-            top: -2px;
-            right: -1px;
+            top: 0;
+            right: 5px;
             background-color: var(--secondary-color);
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
     
@@ -100,12 +105,6 @@ body {
         }
     }    
 }
-
-
-
-
-
-
 
 /* Hero Section */
 .hero {
@@ -541,8 +540,23 @@ footer {
 }
 
 @media (max-width: 576px) {
-    .navbar-brand img {
-        height: 30px;
+    .navbar {
+        padding: 0.40rem 0.90rem;
+        
+        .navbar-toggler-icon {
+            height: 25px;
+            width: 25px;
+        }
+                
+        .balance-pill {
+            font-size: 0.85rem;
+        }
+        
+        .dropdown-menu {
+            .dropdown-item {
+                font-size: 0.95rem;
+            }
+        }    
     }
     
     .hero h1 {

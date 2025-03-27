@@ -24,12 +24,11 @@ body {
   box-shadow: none;
 }
 .navbar .navbar-brand img, .navbar .offcanvas-title img {
-  height: 30px;
+  height: 27px;
 }
 .navbar .navbar-brand span, .navbar .offcanvas-title span {
   font-weight: 700;
   color: var(--primary-color);
-  margin-left: 5px;
 }
 .navbar .nav-link {
   color: var(--dark-color);
@@ -48,9 +47,15 @@ body {
 }
 .navbar .notification-badge .badge {
   position: absolute;
-  top: -2px;
-  right: -1px;
+  top: 0;
+  right: 5px;
   background-color: var(--secondary-color);
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .navbar .balance-pill {
   background-color: var(--light-color);
@@ -508,8 +513,18 @@ footer {
   }
 }
 @media (max-width: 576px) {
-  .navbar-brand img {
-    height: 30px;
+  .navbar {
+    padding: 0.4rem 0.9rem;
+  }
+  .navbar .navbar-toggler-icon {
+    height: 25px;
+    width: 25px;
+  }
+  .navbar .balance-pill {
+    font-size: 0.85rem;
+  }
+  .navbar .dropdown-menu .dropdown-item {
+    font-size: 0.95rem;
   }
   .hero h1 {
     font-size: 1.8rem;
