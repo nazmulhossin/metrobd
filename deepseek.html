@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metro Rail BD - QR Ticketing System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #006a4e; /* Bangladesh green */
+            --secondary-color: #f42a41; /* Bangladesh red */
+            --accent-color: #ff7f00;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+        }
+        
+        .notification-icon {
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                        url('img/metro-cover.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .card-feature {
+            border-radius: 10px;
+            transition: transform 0.3s;
+            height: 100%;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-feature:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-feature i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 106, 78, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        
+        .metro-map-container {
+            background-color: var(--primary-color);
+            padding: 30px;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .metro-map {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        
+        .fare-calculator {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #005a42;
+            border-color: #005a42;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d31f36;
+            border-color: #d31f36;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .qr-modal .modal-content {
+            border-radius: 15px;
+        }
+        
+        .qr-code-container {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .station-select {
+            position: relative;
+        }
+        
+        .station-select:after {
+            content: "\f078";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            color: var(--primary-color);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Dhaka_Metro_Rail.svg/1200px-Dhaka_Metro_Rail.svg.png" alt="Metro Rail BD Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My QR Codes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Trips</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item notification-icon me-3">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-wallet me-1"></i> Balance: ৳120.50
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> Profile
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">My Account</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Log Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Welcome to Metro Rail BD</h1>
+            <p class="lead mb-5">Fast, convenient, and cashless travel across Dhaka with our QR code ticketing system</p>
+            <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#generateQRModal">
+                    <i class="fas fa-qrcode me-2"></i> Generate QR Ticket
+                </button>
+                <button class="btn btn-secondary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#checkFareModal">
+                    <i class="fas fa-search-dollar me-2"></i> Check Fare
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Quick Access</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card card-feature text-center p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h5>Generate QR Code</h5>
+                        <p>Create a new QR code ticket for your journey</p>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generateQRModal">Generate</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card card-feature text-center p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-ticket"></i>
+                        </div>
+                        <h5>Buy QR Ticket</h5>
+                        <p>Purchase tickets for multiple trips at once</p>
+                        <button class="btn btn-sm btn-primary">Buy Now</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card card-feature text-center p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-subway"></i>
+                        </div>
+                        <h5>Metro Map & Routes</h5>
+                        <p>View the complete metro network and stations</p>
+                        <button class="btn btn-sm btn-primary">View Map</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card card-feature text-center p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h5>Metro Guidelines</h5>
+                        <p>Learn about metro rules and regulations</p>
+                        <button class="btn btn-sm btn-primary">Read More</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metro Map Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="metro-map-container">
+                        <h3 class="mb-4">Dhaka Metro Rail Network</h3>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Dhaka_Mass_Rapid_Transit_Development_Project_%28Phase_1%26%2326%3B2%29.svg/1200px-Dhaka_Mass_Rapid_Transit_Development_Project_%28Phase_1%26%2326%3B2%29.svg.png" alt="Dhaka Metro Map" class="metro-map">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="fare-calculator">
+                        <h3 class="mb-4">Fare Calculator</h3>
+                        <form id="fareCalculatorForm">
+                            <div class="mb-3 station-select">
+                                <label for="fromStation" class="form-label">From Station</label>
+                                <select class="form-select" id="fromStation" required>
+                                    <option value="" selected disabled>Select station</option>
+                                    <option value="uttara-north">Uttara North</option>
+                                    <option value="uttara-center">Uttara Center</option>
+                                    <option value="uttara-south">Uttara South</option>
+                                    <option value="pallabi">Pallabi</option>
+                                    <option value="mirpur-11">Mirpur 11</option>
+                                    <option value="mirpur-10">Mirpur 10</option>
+                                    <option value="kazipara">Kazipara</option>
+                                    <option value="shewrapara">Shewrapara</option>
+                                    <option value="agargaon">Agargaon</option>
+                                    <option value="bijoy-sarani">Bijoy Sarani</option>
+                                    <option value="farmgate">Farmgate</option>
+                                    <option value="karwan-bazar">Karwan Bazar</option>
+                                    <option value="shahbagh">Shahbagh</option>
+                                    <option value="dhaka-university">Dhaka University</option>
+                                    <option value="bangladesh-secretariat">Bangladesh Secretariat</option>
+                                    <option value="motijheel">Motijheel</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 station-select">
+                                <label for="toStation" class="form-label">To Station</label>
+                                <select class="form-select" id="toStation" required>
+                                    <option value="" selected disabled>Select station</option>
+                                    <option value="uttara-north">Uttara North</option>
+                                    <option value="uttara-center">Uttara Center</option>
+                                    <option value="uttara-south">Uttara South</option>
+                                    <option value="pallabi">Pallabi</option>
+                                    <option value="mirpur-11">Mirpur 11</option>
+                                    <option value="mirpur-10">Mirpur 10</option>
+                                    <option value="kazipara">Kazipara</option>
+                                    <option value="shewrapara">Shewrapara</option>
+                                    <option value="agargaon">Agargaon</option>
+                                    <option value="bijoy-sarani">Bijoy Sarani</option>
+                                    <option value="farmgate">Farmgate</option>
+                                    <option value="karwan-bazar">Karwan Bazar</option>
+                                    <option value="shahbagh">Shahbagh</option>
+                                    <option value="dhaka-university">Dhaka University</option>
+                                    <option value="bangladesh-secretariat">Bangladesh Secretariat</option>
+                                    <option value="motijheel">Motijheel</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Calculate Fare</button>
+                        </form>
+                        <div id="fareResult" class="mt-4 text-center" style="display: none;">
+                            <h4>Estimated Fare</h4>
+                            <p class="display-6 fw-bold text-primary">৳<span id="calculatedFare">0</span></p>
+                            <p class="text-muted">This is an estimated fare. Final fare may vary slightly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">How QR Ticketing Works</h2>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card card-feature text-center p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h5>1. Generate QR Code</h5>
+                        <p>Create a unique QR code for your trip through our app or website</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card card-feature text-center p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-door-open"></i>
+                        </div>
+                        <h5>2. Scan at Entry</h5>
+                        <p>Scan your QR code at the entry gate to begin your journey</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card card-feature text-center p-4">
+                        <div class="feature-icon">
+                            <i class="fas fa-door-closed"></i>
+                        </div>
+                        <h5>3. Scan at Exit</h5>
+                        <p>Scan again at your destination to complete the trip and pay automatically</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Metro Rail BD</h5>
+                    <p>Providing fast, safe, and comfortable metro rail services to the people of Bangladesh.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Home</a></li>
+                        <li><a href="#" class="text-white">Fares</a></li>
+                        <li><a href="#" class="text-white">Stations</a></li>
+                        <li><a href="#" class="text-white">Schedule</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Help Center</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-white">FAQ</a></li>
+                        <li><a href="#" class="text-white">Feedback</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Download App</h5>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-outline-light btn-sm">
+                            <i class="fab fa-google-play me-1"></i> Google Play
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-sm">
+                            <i class="fab fa-app-store me-1"></i> App Store
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-4 mb-3" style="border-color: rgba(255,255,255,0.1);">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2023 Metro Rail BD. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3">Privacy Policy</a>
+                    <a href="#" class="text-white">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Generate QR Code Modal -->
+    <div class="modal fade" id="generateQRModal" tabindex="-1" aria-labelledby="generateQRModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="generateQRModalLabel">Generate QR Ticket</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="qr-code-container">
+                        <div class="qr-code mb-3">
+                            <!-- This would be replaced with actual QR code generation -->
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=MRBD-USER123-TRIP456" alt="QR Code" class="img-fluid">
+                        </div>
+                        <p class="mb-4">Scan this QR code at the metro station gates to begin and end your journey.</p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download me-2"></i> Download QR Code
+                            </button>
+                            <button class="btn btn-outline-secondary">
+                                <i class="fas fa-share-alt me-2"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <small class="text-muted">This QR code will expire in 2 hours or after use.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Check Fare Modal -->
+    <div class="modal fade" id="checkFareModal" tabindex="-1" aria-labelledby="checkFareModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="checkFareModalLabel">Check Fare Between Stations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalFareCalculator">
+                        <div class="mb-3 station-select">
+                            <label for="modalFromStation" class="form-label">From Station</label>
+                            <select class="form-select" id="modalFromStation" required>
+                                <option value="" selected disabled>Select station</option>
+                                <option value="uttara-north">Uttara North</option>
+                                <option value="uttara-center">Uttara Center</option>
+                                <option value="uttara-south">Uttara South</option>
+                                <option value="pallabi">Pallabi</option>
+                                <option value="mirpur-11">Mirpur 11</option>
+                                <option value="mirpur-10">Mirpur 10</option>
+                                <option value="kazipara">Kazipara</option>
+                                <option value="shewrapara">Shewrapara</option>
+                                <option value="agargaon">Agargaon</option>
+                                <option value="bijoy-sarani">Bijoy Sarani</option>
+                                <option value="farmgate">Farmgate</option>
+                                <option value="karwan-bazar">Karwan Bazar</option>
+                                <option value="shahbagh">Shahbagh</option>
+                                <option value="dhaka-university">Dhaka University</option>
+                                <option value="bangladesh-secretariat">Bangladesh Secretariat</option>
+                                <option value="motijheel">Motijheel</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 station-select">
+                            <label for="modalToStation" class="form-label">To Station</label>
+                            <select class="form-select" id="modalToStation" required>
+                                <option value="" selected disabled>Select station</option>
+                                <option value="uttara-north">Uttara North</option>
+                                <option value="uttara-center">Uttara Center</option>
+                                <option value="uttara-south">Uttara South</option>
+                                <option value="pallabi">Pallabi</option>
+                                <option value="mirpur-11">Mirpur 11</option>
+                                <option value="mirpur-10">Mirpur 10</option>
+                                <option value="kazipara">Kazipara</option>
+                                <option value="shewrapara">Shewrapara</option>
+                                <option value="agargaon">Agargaon</option>
+                                <option value="bijoy-sarani">Bijoy Sarani</option>
+                                <option value="farmgate">Farmgate</option>
+                                <option value="karwan-bazar">Karwan Bazar</option>
+                                <option value="shahbagh">Shahbagh</option>
+                                <option value="dhaka-university">Dhaka University</option>
+                                <option value="bangladesh-secretariat">Bangladesh Secretariat</option>
+                                <option value="motijheel">Motijheel</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Check Fare</button>
+                    </form>
+                    <div id="modalFareResult" class="mt-4 text-center" style="display: none;">
+                        <h4>Estimated Fare</h4>
+                        <p class="display-6 fw-bold text-primary">৳<span id="modalCalculatedFare">0</span></p>
+                        <p class="text-muted">This is an estimated fare. Final fare may vary slightly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Fare calculation logic
+        document.addEventListener('DOMContentLoaded', function() {
+            // Station distances (for demo purposes)
+            const stationOrder = [
+                "uttara-north", "uttara-center", "uttara-south", "pallabi", 
+                "mirpur-11", "mirpur-10", "kazipara", "shewrapara", 
+                "agargaon", "bijoy-sarani", "farmgate", "karwan-bazar", 
+                "shahbagh", "dhaka-university", "bangladesh-secretariat", "motijheel"
+            ];
+            
+            // Fare calculation function
+            function calculateFare(from, to) {
+                const fromIndex = stationOrder.indexOf(from);
+                const toIndex = stationOrder.indexOf(to);
+                
+                if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) {
+                    return 0;
+                }
+                
+                const stationCount = Math.abs(toIndex - fromIndex);
+                
+                // Simple fare calculation based on station count
+                if (stationCount <= 3) return 20;
+                if (stationCount <= 6) return 30;
+                if (stationCount <= 9) return 40;
+                return 60;
+            }
+            
+            // Main form fare calculation
+            const fareCalculatorForm = document.getElementById('fareCalculatorForm');
+            const fareResult = document.getElementById('fareResult');
+            
+            if (fareCalculatorForm) {
+                fareCalculatorForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const fromStation = document.getElementById('fromStation').value;
+                    const toStation = document.getElementById('toStation').value;
+                    
+                    const fare = calculateFare(fromStation, toStation);
+                    
+                    document.getElementById('calculatedFare').textContent = fare;
+                    fareResult.style.display = 'block';
+                });
+            }
+            
+            // Modal form fare calculation
+            const modalFareCalculator = document.getElementById('modalFareCalculator');
+            const modalFareResult = document.getElementById('modalFareResult');
+            
+            if (modalFareCalculator) {
+                modalFareCalculator.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const fromStation = document.getElementById('modalFromStation').value;
+                    const toStation = document.getElementById('modalToStation').value;
+                    
+                    const fare = calculateFare(fromStation, toStation);
+                    
+                    document.getElementById('modalCalculatedFare').textContent = fare;
+                    modalFareResult.style.display = 'block';
+                });
+            }
+            
+            // Reset fare result when modal is closed
+            const checkFareModal = document.getElementById('checkFareModal');
+            if (checkFareModal) {
+                checkFareModal.addEventListener('hidden.bs.modal', function() {
+                    modalFareResult.style.display = 'none';
+                    document.getElementById('modalFromStation').selectedIndex = 0;
+                    document.getElementById('modalToStation').selectedIndex = 0;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
