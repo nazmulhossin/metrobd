@@ -50,6 +50,23 @@ body {
             border-bottom: 2px solid var(--primary-color);
         }
     }
+
+    .offcanvas {
+        width: 270px;
+        left: -25px;
+
+        .offcanvas-header {
+            .offcanvas-title {
+                img {
+                    height: 27px;
+                }
+
+                span {
+                    font-size: 1.15rem;
+                }
+            }
+        }
+    }
     
     .notification-badge {
         position: relative;
@@ -212,44 +229,44 @@ body {
 .how-it-works {
     padding: 80px 0;
     background-color: white;
-}
 
-.step-card {
-    text-align: center;
-    position: relative;
-    padding: 20px;
-}
+    .step-card {
+        text-align: center;
+        position: relative;
+        padding: 20px;
 
-.step-number {
-    background-color: var(--primary-color);
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
 
-.step-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: var(--primary-color);
-}
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        p {
+            color: var(--gray-color);
+        }
 
-.step-card p {
-    color: var(--gray-color);
-}
-
-.step-img {
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
-    height: auto;
+        .step-img {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            height: auto;
+        }
+    }
 }
 
 /* Fare Checker Section */
@@ -553,10 +570,31 @@ footer {
         }
         
         .dropdown-menu {
+            min-width: 180px;
+
             .dropdown-item {
                 font-size: 0.95rem;
+                padding: 0.4rem 1.2rem;
             }
         }    
+    }
+
+    .offcanvas {
+        width: 270px;
+        
+        .offcanvas-header {
+            height: 53.2px;
+
+            .offcanvas-title {
+                img {
+                    height: 27px;
+                }
+
+                span {
+                    font-size: 1.15rem;
+                }
+            }
+        }
     }
     
     .hero h1 {
