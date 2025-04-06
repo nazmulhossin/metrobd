@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Metro Rail BD</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        /* Variables */
+        :root {
+            --primary-color: #006A4E;
+            --secondary-color: #F42A41;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --border-radius: 8px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Base styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+        }
+
+        .btn-auth {
+            background-color: white;
+            color: var(--primary-color);
+            border: none;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-auth:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .btn-auth.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        /* Form styling */
+        .auth-container {
+            max-width: 500px;
+            margin: 3rem auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .auth-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .auth-form {
+            padding: 2rem;
+        }
+
+        .form-control {
+            border-radius: var(--border-radius);
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 106, 78, 0.25);
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .btn-login {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-weight: 600;
+            border-radius: var(--border-radius);
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #005a42;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-footer {
+            text-align: center;
+            padding: 1rem;
+            border-top: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+
+        .signup-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: var(--secondary-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .is-invalid ~ .error-message {
+            display: block;
+        }
+
+        .social-login {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .social-login-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .social-login-title::before,
+        .social-login-title::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .social-login-title span {
+            margin: 0 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .btn-social {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            margin: 0 5px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            color: #555;
+            transition: all 0.3s;
+        }
+
+        .btn-social:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-google {
+            color: #DB4437;
+        }
+
+        .btn-facebook {
+            color: #4267B2;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .auth-container {
+                margin: 2rem 1rem;
+            }
+            
+            .auth-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 100 100'><text x='50' y='50' text-anchor='middle' alignment-baseline='middle' font-size='50' fill='white'>🚇</text></svg>" 
+                     alt="Metro Rail BD Logo" class="me-2">
+                Metro Rail BD
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/MapAndRoutes">Map & Routes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Check Fare</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Guidelines</a></li>
+                </ul>
+                <div class="d-flex">
+                    <a href="/Account/Login" class="btn btn-auth active me-2">Login</a>
+                    <a href="/Account/Register" class="btn btn-auth">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Form -->
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p class="mb-0">Login to access your Metro Rail BD account</p>
+            </div>
+            <div class="auth-form">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="loginIdentifier" class="form-label">Email or Phone Number</label>
+                        <input type="text" class="form-control" id="loginIdentifier" placeholder="Enter your email or phone" required>
+                        <div class="error-message">Please enter a valid email or phone</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                        <div class="error-message">Please enter your password</div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                        </div>
+                        <a href="/Account/ForgotPassword" class="signup-link">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-login">Login</button>
+                    
+                    <div class="social-login">
+                        <div class="social-login-title">
+                            <span>Or Login With</span>
+                        </div>
+                        <a href="#" class="btn-social btn-google">G</a>
+                        <a href="#" class="btn-social btn-facebook">f</a>
+                    </div>
+                </form>
+            </div>
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="/Account/Register" class="signup-link">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const loginIdentifier = document.getElementById('loginIdentifier');
+            const loginPassword = document.getElementById('loginPassword');
+            
+            // Form validation
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                
+                // Clear previous error states
+                form.querySelectorAll('.is-invalid').forEach(el => {
+                    el.classList.remove('is-invalid');
+                });
+                
+                // Validate login identifier (email or phone)
+                if (loginIdentifier.value.trim() === '') {
+                    loginIdentifier.classList.add('is-invalid');
+                    isValid = false;
+                }
+                
+                // Validate password
+                if (loginPassword.value === '') {
+                    loginPassword.classList.add('is-invalid');
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    // Normally you would submit the form here
+                    alert('Login successful! Redirecting to dashboard...');
+                    // Redirect to user dashboard
+                    // window.location.href = '/User/Dashboard';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
