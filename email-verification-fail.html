@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Failed - Bangladesh Metro Rail QR Ticketing System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #006a4e; /* Bangladesh flag green */
+            --secondary-color: #f42a41; /* Bangladesh flag red */
+            --accent-color: #ffb81c; /* Gold accent */
+            --dark-color: #333333;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --error-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+        }
+
+        /* Header Styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .navbar-brand span {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-left: 8px;
+        }
+
+        .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .notification-badge {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--secondary-color);
+        }
+
+        .balance-pill {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            font-weight: 600;
+            border: 1px solid var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo img {
+            height: 40px;
+        }
+
+        .footer-logo span {
+            font-weight: 700;
+            color: white;
+            margin-left: 8px;
+            font-size: 1.2rem;
+        }
+
+        .footer-about p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Fail Section Styles */
+        .fail-section {
+            background-color: var(--light-color);
+            min-height: calc(100vh - 76px - 430px); /* Adjust based on header and footer height */
+            display: flex;
+            align-items: center;
+            padding: 80px 0;
+        }
+
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card-header {
+            background-color: var(--error-color) !important;
+            border-bottom: none;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: #005a42;
+            border-color: #005a42;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 106, 78, 0.3);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 106, 78, 0.3);
+        }
+
+        /* Error Icon */
+        .error-icon {
+            width: 120px;
+            height: 120px;
+            background-color: rgba(220, 53, 69, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: var(--error-color);
+            font-size: 4rem;
+        }
+
+        /* Possible Reasons Section */
+        .possible-reasons {
+            background-color: rgba(220, 53, 69, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .possible-reasons h5 {
+            color: var(--error-color);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .possible-reasons h5 i {
+            margin-right: 10px;
+        }
+
+        .reasons-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        .reasons-list li {
+            margin-bottom: 12px;
+            color: var(--gray-color);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .reasons-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .reasons-list li i {
+            color: var(--error-color);
+            margin-right: 10px;
+            margin-top: 4px;
+        }
+
+        /* Subtle animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fail-section .card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .error-icon {
+            animation: shake 0.8s ease-in-out;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 576px) {
+            .navbar-brand img {
+                height: 30px;
+            }
+            
+            .fail-section {
+                padding: 40px 0;
+            }
+
+            .error-icon {
+                width: 100px;
+                height: 100px;
+                font-size: 3.5rem;
+            }
+
+            .verification-steps {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                <span>Metro Rail BD</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My QR Codes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Trips</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link notification-badge" href="#">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#">
+                            <span class="balance-pill">
+                                <i class="fas fa-wallet me-1"></i> ৳500
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="login.html">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="index.html">
+                            <i class="fas fa-user-plus me-1"></i> Sign Up
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Fail Section -->
+    <section class="fail-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card shadow-lg border-0 overflow-hidden">
+                        <div class="card-header bg-danger text-white text-center py-4">
+                            <h2 class="mb-0 fw-bold">Verification Failed</h2>
+                            <p class="mb-0 mt-2 opacity-75">We couldn't verify your email address</p>
+                        </div>
+                        <div class="card-body p-4 p-lg-5 text-center">                            
+                            <!-- Error Icon -->
+                            <div class="error-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            
+                            <h3 class="mb-3">Email Verification Failed</h3>
+                            <p class="mb-4">We were unable to verify your email address. This could be due to an expired or invalid verification link.</p>
+                            
+                            <div class="d-grid gap-3">
+                                <button id="resendBtn" class="btn btn-primary py-3 fw-bold">
+                                    <i class="fas fa-paper-plane me-2"></i> Resend Verification Email
+                                </button>
+                                <a href="login.html" class="btn btn-outline-primary py-2">
+                                    <i class="fas fa-sign-in-alt me-2"></i> Return to Login
+                                </a>
+                            </div>
+                            
+                            <!-- Possible Reasons -->
+                            <div class="possible-reasons mt-4">
+                                <h5><i class="fas fa-info-circle"></i> Possible Reasons</h5>
+                                <ul class="reasons-list">
+                                    <li>
+                                        <i class="fas fa-clock"></i>
+                                        <div>
+                                            <strong>Expired verification link</strong>
+                                            <p class="mb-0">Verification links expire after 24 hours for security reasons</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-check-double"></i>
+                                        <div>
+                                            <strong>Email already verified</strong>
+                                            <p class="mb-0">Your email may have been verified already</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-link-slash"></i>
+                                        <div>
+                                            <strong>Invalid or broken link</strong>
+                                            <p class="mb-0">The verification link may be incomplete or corrupted</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <p class="mb-0">Need assistance? <a href="#" class="fw-bold">Contact our support team</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="footer-about">
+                        <div class="footer-logo">
+                            <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                            <span>Metro Rail BD</span>
+                        </div>
+                        <p>Bangladesh's first QR-based metro ticketing system, making urban transportation faster, easier, and more convenient for everyone.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#metro-map">Metro Map</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2">
+                    <h4 class="footer-heading">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2">
+                    <h4 class="footer-heading">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2">
+                    <h4 class="footer-heading">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt me-2"></i> Agargaon, Dhaka</a></li>
+                        <li><a href="#"><i class="fas fa-phone me-2"></i> 16XXX</a></li>
+                        <li><a href="#"><i class="fas fa-envelope me-2"></i> info@metrorailbd.gov.bd</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Metro Rail BD. All rights reserved. A service of Bangladesh Government.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Resend verification email
+        document.getElementById('resendBtn').addEventListener('click', function() {
+            // Show loading state
+            const originalBtnText = this.innerHTML;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Sending...';
+            this.disabled = true;
+            
+            // Simulate API call with timeout
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-check me-2"></i> Verification Email Sent';
+                
+                // Show success message
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-success mt-3';
+                alertDiv.innerHTML = '<i class="fas fa-check-circle me-2"></i> A new verification email has been sent to your email address. Please check your inbox.';
+                
+                this.parentNode.insertAdjacentElement('afterend', alertDiv);
+                
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    this.innerHTML = originalBtnText;
+                    this.disabled = false;
+                }, 3000);
+            }, 1500);
+        });
+
+        // Make the elements animate in sequence
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.verification-steps, .error-icon, h3, p, .btn, .possible-reasons, .mt-4');
+            
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(10px)';
+                element.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, 100 + (index * 50));
+            });
+        });
+    </script>
+</body>
+</html>

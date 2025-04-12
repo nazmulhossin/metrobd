@@ -1,0 +1,2677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Bangladesh Metro Rail QR Ticketing System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #006a4e; /* Bangladesh flag green */
+            --secondary-color: #f42a41; /* Bangladesh flag red */
+            --accent-color: #ffb81c; /* Gold accent */
+            --dark-color: #333333;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: #f5f5f5;
+            background-color: #f5f7fa;
+        }
+
+        /* Header Styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .navbar-brand span {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-left: 8px;
+        }
+
+        .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .notification-badge {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--secondary-color);
+        }
+
+        .balance-pill {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            font-weight: 600;
+            border: 1px solid var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo img {
+            height: 40px;
+        }
+
+        .footer-logo span {
+            font-weight: 700;
+            color: white;
+            margin-left: 8px;
+            font-size: 1.2rem;
+        }
+
+        .footer-about p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            padding: 30px 0;
+            min-height: calc(100vh - 76px - 430px);
+        }
+
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            height: 100%;
+        }
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-user-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid var(--primary-color);
+        }
+
+        .sidebar-user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-user-role {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu-item {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu-link:hover {
+            background-color: rgba(0, 106, 78, 0.05);
+            color: var(--primary-color);
+        }
+
+        .sidebar-menu-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-menu-icon {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu-text {
+            font-weight: 500;
+        }
+
+        .sidebar-menu-badge {
+            margin-left: auto;
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+        }
+
+        .content-area {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            height: 100%;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .content-action .btn {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+
+        /* Dashboard Overview */
+        .stats-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            height: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-card.balance {
+            border-left-color: var(--success-color);
+        }
+
+        .stats-card.trips {
+            border-left-color: var(--info-color);
+        }
+
+        .stats-card.tickets {
+            border-left-color: var(--warning-color);
+        }
+
+        .stats-card.savings {
+            border-left-color: var(--secondary-color);
+        }
+
+        .stats-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .stats-card.balance .stats-icon {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .stats-card.trips .stats-icon {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
+
+        .stats-card.tickets .stats-icon {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .stats-card.savings .stats-icon {
+            background-color: rgba(244, 42, 65, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .stats-title {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            margin-bottom: 5px;
+        }
+
+        .stats-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stats-description {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+
+        .stats-trend {
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .stats-trend.up {
+            color: var(--success-color);
+        }
+
+        .stats-trend.down {
+            color: var(--danger-color);
+        }
+
+        .stats-trend i {
+            margin-right: 5px;
+        }
+
+        /* Recent Activity */
+        .activity-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.ticket {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .activity-icon.trip {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
+
+        .activity-icon.payment {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .activity-icon.refund {
+            background-color: rgba(244, 42, 65, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .activity-content {
+            flex-grow: 1;
+        }
+
+        .activity-text {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+
+        .activity-amount {
+            font-weight: 600;
+            margin-left: auto;
+            padding-left: 15px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .activity-amount.credit {
+            color: var(--success-color);
+        }
+
+        .activity-amount.debit {
+            color: var(--danger-color);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .quick-action-btn {
+            background-color: white;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--dark-color);
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .quick-action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(0, 106, 78, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.5rem;
+        }
+
+        .quick-action-text {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Profile Tab */
+        .profile-section {
+            display: none;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            margin-right: 25px;
+        }
+
+        .profile-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: var(--gray-color);
+            margin-bottom: 10px;
+        }
+
+        .profile-info .badge {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+        }
+
+        .profile-edit-btn {
+            margin-left: auto;
+        }
+
+        .profile-details {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .profile-details h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-details h4 i {
+            margin-right: 10px;
+        }
+
+        .profile-details-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .profile-details-label {
+            width: 150px;
+            font-weight: 600;
+            color: var(--gray-color);
+        }
+
+        .profile-details-value {
+            flex-grow: 1;
+        }
+
+        /* QR Tickets Tab */
+        .tickets-section {
+            display: none;
+        }
+
+        .ticket-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .ticket-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .ticket-card.active {
+            border-left-color: var(--success-color);
+        }
+
+        .ticket-card.expired {
+            border-left-color: var(--gray-color);
+            opacity: 0.7;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .ticket-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .ticket-status {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+        }
+
+        .ticket-status.active {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .ticket-status.expired {
+            background-color: rgba(108, 117, 125, 0.1);
+            color: var(--gray-color);
+        }
+
+        .ticket-details {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .ticket-qr {
+            width: 100px;
+            height: 100px;
+            margin-right: 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .ticket-qr img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .ticket-info {
+            flex-grow: 1;
+        }
+
+        .ticket-info-row {
+            display: flex;
+            margin-bottom: 8px;
+        }
+
+        .ticket-info-label {
+            width: 100px;
+            font-weight: 500;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .ticket-info-value {
+            flex-grow: 1;
+            font-size: 0.9rem;
+        }
+
+        .ticket-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .ticket-actions .btn {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Trip History Tab */
+        .trips-section {
+            display: none;
+        }
+
+        .trip-filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .trip-search {
+            width: 300px;
+        }
+
+        .trip-date-filter {
+            display: flex;
+            gap: 10px;
+        }
+
+        .trip-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .trip-table th {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-color);
+            border-bottom: 2px solid #eee;
+        }
+
+        .trip-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .trip-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .trip-table tr:hover td {
+            background-color: #f8f9fa;
+        }
+
+        .trip-id {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .trip-route {
+            display: flex;
+            align-items: center;
+        }
+
+        .trip-station {
+            font-weight: 500;
+        }
+
+        .trip-arrow {
+            margin: 0 10px;
+            color: var(--gray-color);
+        }
+
+        .trip-date {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .trip-status {
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .trip-status.completed {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .trip-status.cancelled {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+
+        .trip-status.ongoing {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .trip-fare {
+            font-weight: 600;
+        }
+
+        .trip-actions .btn {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        .trip-pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Payment Methods Tab */
+        .payment-section {
+            display: none;
+        }
+
+        .payment-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .payment-card.default {
+            border-left-color: var(--success-color);
+        }
+
+        .payment-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-size: 1.8rem;
+        }
+
+        .payment-icon.bkash {
+            color: #e2136e;
+        }
+
+        .payment-icon.nagad {
+            color: #f42a41;
+        }
+
+        .payment-icon.rocket {
+            color: #8c3494;
+        }
+
+        .payment-icon.card {
+            color: #1a1f71;
+        }
+
+        .payment-details {
+            flex-grow: 1;
+        }
+
+        .payment-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-name .badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            margin-left: 10px;
+        }
+
+        .payment-info {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .payment-actions .btn {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .add-payment-card {
+            background-color: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-payment-card:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(0, 106, 78, 0.05);
+        }
+
+        .add-payment-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(0, 106, 78, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+        }
+
+        .add-payment-text {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        /* Security Settings Tab */
+        .security-section {
+            display: none;
+        }
+
+        .security-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .security-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .security-card h4 i {
+            margin-right: 10px;
+        }
+
+        .security-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .security-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .security-item-info h5 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .security-item-info p {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .security-item-action .btn {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .security-status {
+            display: flex;
+            align-items: center;
+        }
+
+        .security-status-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        .security-status-icon.enabled {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .security-status-icon.disabled {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+
+        .security-status-text {
+            font-weight: 500;
+        }
+
+        .security-status-text.enabled {
+            color: var(--success-color);
+        }
+
+        .security-status-text.disabled {
+            color: var(--danger-color);
+        }
+
+        /* Notifications Tab */
+        .notifications-section {
+            display: none;
+        }
+
+        .notification-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .notification-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-card.unread {
+            border-left-color: var(--info-color);
+            background-color: rgba(23, 162, 184, 0.05);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-title .badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            margin-left: 10px;
+        }
+
+        .notification-time {
+            color: var(--gray-color);
+            font-size: 0.85rem;
+        }
+
+        .notification-content {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+        }
+
+        .notification-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .notification-actions .btn {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .notification-settings {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .notification-settings h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-settings h4 i {
+            margin-right: 10px;
+        }
+
+        .notification-setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notification-setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-setting-info h5 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .notification-setting-info p {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* Help & Support Tab */
+        .help-section {
+            display: none;
+        }
+
+        .help-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+        }
+
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .help-card h4 i {
+            margin-right: 10px;
+        }
+
+        .help-card p {
+            color: var(--gray-color);
+            margin-bottom: 20px;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            color: var(--gray-color);
+            padding-left: 20px;
+            border-left: 2px solid var(--primary-color);
+            margin-top: 10px;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .contact-method {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-method:hover {
+            background-color: rgba(0, 106, 78, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .contact-method-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(0, 106, 78, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+        }
+
+        .contact-method-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .contact-method-info {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                margin-bottom: 30px;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .contact-methods {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .profile-edit-btn {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+            
+            .profile-details-row {
+                flex-direction: column;
+            }
+            
+            .profile-details-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            
+            .ticket-details {
+                flex-direction: column;
+            }
+            
+            .ticket-qr {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+            
+            .trip-filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .trip-search {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .trip-date-filter {
+                width: 100%;
+            }
+            
+            .trip-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .payment-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .payment-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .payment-actions {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .content-action {
+                margin-top: 15px;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .security-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .security-item-action {
+                margin-top: 15px;
+            }
+            
+            .notification-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .notification-time {
+                margin-top: 5px;
+            }
+        }
+
+        /* Active Tab Styles */
+        .dashboard-section.active,
+        .profile-section.active,
+        .tickets-section.active,
+        .trips-section.active,
+        .payment-section.active,
+        .security-section.active,
+        .notifications-section.active,
+        .help-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                <span>Metro Rail BD</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">My Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Trips</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link notification-badge" href="#">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge rounded-pill">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#">
+                            <span class="balance-pill">
+                                <i class="fas fa-wallet me-1"></i> ৳500
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://via.placeholder.com/30x30" alt="User" class="rounded-circle" width="30" height="30">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> My Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3">
+                    <div class="sidebar">
+                        <div class="sidebar-user">
+                            <img src="https://via.placeholder.com/60x60" alt="User" class="sidebar-user-img">
+                            <div>
+                                <div class="sidebar-user-name">Rahul Ahmed</div>
+                                <div class="sidebar-user-role">Gold Member</div>
+                            </div>
+                        </div>
+                        <ul class="sidebar-menu">
+                            <li class="sidebar-menu-item">
+                                <a href="#dashboard" class="sidebar-menu-link active" data-tab="dashboard">
+                                    <span class="sidebar-menu-icon"><i class="fas fa-tachometer-alt"></i></span>
+                                    <span class="sidebar-menu-text">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="#profile" class="sidebar-menu-link" data-tab="profile">
+                                    <span class="sidebar-menu-icon"><i class="fas fa-user"></i></span>
+                                    <span class="sidebar-menu-text">My Profile</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="#tickets" class="sidebar-menu-link" data-tab="tickets">
+                                    <span class="sidebar-menu-icon"><i class="fas fa-qrcode"></i></span>
+                                    <span class="sidebar-menu-text">QR Tickets</span>
+                                    <span class="sidebar-menu-badge">2</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="#trips" class="sidebar-menu-link" data-tab="trips">
+                                    <span class="sidebar-menu-icon"><i class="fas fa-subway"></i></span>
+                                    <span class="sidebar-menu-text">Trip History</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="#payment" class="sidebar-menu-link" data-tab="payment">
+                                    <span class="sidebar-menu-icon"><i class="fas fa-credit-card"></i></span>
+                                    <span class="sidebar-menu-text">Payment Methods</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="#security" class="sidebar-menu-link" data-tab="security">
+                                    <span class="sidebar-menu-icon"><i class="fas fa-shield-alt"></i></span>
+                                    <span class="sidebar-menu-text">Security Settings</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="#notifications" class="sidebar-menu-link" data-tab="notifications">
+                                    <span class="sidebar-menu-icon"><i class="fas fa-bell"></i></span>
+                                    <span class="sidebar-menu-text">Notifications</span>
+                                    <span class="sidebar-menu-badge">3</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="#help" class="sidebar-menu-link" data-tab="help">
+                                    <span class="sidebar-menu-icon"><i class="fas fa-question-circle"></i></span>
+                                    <span class="sidebar-menu-text">Help & Support</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Content Area -->
+                <div class="col-lg-9">
+                    <!-- Dashboard Section -->
+                    <div class="dashboard-section active" id="dashboard-section">
+                        <div class="content-area">
+                            <div class="content-header">
+                                <h2 class="content-title">Dashboard</h2>
+                                <div class="content-action">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-sync-alt me-2"></i> Refresh
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Stats Cards -->
+                            <div class="row g-4">
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="stats-card balance">
+                                        <div class="stats-icon">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="stats-title">Current Balance</div>
+                                        <div class="stats-value">৳500</div>
+                                        <div class="stats-description">Available for tickets</div>
+                                        <div class="stats-trend up">
+                                            <i class="fas fa-arrow-up"></i> ৳200 from last month
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="stats-card trips">
+                                        <div class="stats-icon">
+                                            <i class="fas fa-subway"></i>
+                                        </div>
+                                        <div class="stats-title">Total Trips</div>
+                                        <div class="stats-value">24</div>
+                                        <div class="stats-description">This month</div>
+                                        <div class="stats-trend up">
+                                            <i class="fas fa-arrow-up"></i> 8 more than last month
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="stats-card tickets">
+                                        <div class="stats-icon">
+                                            <i class="fas fa-qrcode"></i>
+                                        </div>
+                                        <div class="stats-title">Active Tickets</div>
+                                        <div class="stats-value">2</div>
+                                        <div class="stats-description">Valid for use</div>
+                                        <div class="stats-trend">
+                                            <i class="fas fa-minus"></i> Same as yesterday
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-3">
+                                    <div class="stats-card savings">
+                                        <div class="stats-icon">
+                                            <i class="fas fa-piggy-bank"></i>
+                                        </div>
+                                        <div class="stats-title">Total Savings</div>
+                                        <div class="stats-value">৳1,250</div>
+                                        <div class="stats-description">Using QR tickets</div>
+                                        <div class="stats-trend up">
+                                            <i class="fas fa-arrow-up"></i> ৳350 from last month
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Actions -->
+                            <div class="quick-actions">
+                                <a href="#" class="quick-action-btn">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-qrcode"></i>
+                                    </div>
+                                    <div class="quick-action-text">Generate QR Ticket</div>
+                                </a>
+                                <a href="#" class="quick-action-btn">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-wallet"></i>
+                                    </div>
+                                    <div class="quick-action-text">Add Balance</div>
+                                </a>
+                                <a href="#" class="quick-action-btn">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-map"></i>
+                                    </div>
+                                    <div class="quick-action-text">View Metro Map</div>
+                                </a>
+                                <a href="#" class="quick-action-btn">
+                                    <div class="quick-action-icon">
+                                        <i class="fas fa-calculator"></i>
+                                    </div>
+                                    <div class="quick-action-text">Fare Calculator</div>
+                                </a>
+                            </div>
+                            
+                            <!-- Recent Activity -->
+                            <div class="activity-card">
+                                <div class="activity-header">
+                                    <h3 class="activity-title">Recent Activity</h3>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                                </div>
+                                <ul class="activity-list">
+                                    <li class="activity-item">
+                                        <div class="activity-icon ticket">
+                                            <i class="fas fa-qrcode"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-text">Generated QR Ticket for Uttara North to Agargaon</div>
+                                            <div class="activity-time">Today, 10:30 AM</div>
+                                        </div>
+                                        <div class="activity-amount debit">-৳60</div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-icon trip">
+                                            <i class="fas fa-subway"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-text">Completed trip from Uttara North to Agargaon</div>
+                                            <div class="activity-time">Today, 09:45 AM</div>
+                                        </div>
+                                        <div class="activity-amount">-</div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-icon payment">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-text">Added balance via bKash</div>
+                                            <div class="activity-time">Yesterday, 05:20 PM</div>
+                                        </div>
+                                        <div class="activity-amount credit">+৳500</div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-icon refund">
+                                            <i class="fas fa-undo"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-text">Refund for cancelled ticket</div>
+                                            <div class="activity-time">Yesterday, 02:15 PM</div>
+                                        </div>
+                                        <div class="activity-amount credit">+৳60</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Section -->
+                    <div class="profile-section" id="profile-section">
+                        <div class="content-area">
+                            <div class="content-header">
+                                <h2 class="content-title">My Profile</h2>
+                                <div class="content-action">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-edit me-2"></i> Edit Profile
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-header">
+                                <img src="https://via.placeholder.com/100x100" alt="User" class="profile-avatar">
+                                <div class="profile-info">
+                                    <h3>Rahul Ahmed</h3>
+                                    <p>rahul.ahmed@example.com</p>
+                                    <span class="badge bg-warning">Gold Member</span>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-details">
+                                <h4><i class="fas fa-user"></i> Personal Information</h4>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Full Name</div>
+                                    <div class="profile-details-value">Rahul Ahmed</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Email Address</div>
+                                    <div class="profile-details-value">rahul.ahmed@example.com</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Phone Number</div>
+                                    <div class="profile-details-value">+880 1712 345678</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Date of Birth</div>
+                                    <div class="profile-details-value">15 March 1990</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Gender</div>
+                                    <div class="profile-details-value">Male</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">NID Number</div>
+                                    <div class="profile-details-value">1234 5678 9012</div>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-details">
+                                <h4><i class="fas fa-map-marker-alt"></i> Address Information</h4>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Street Address</div>
+                                    <div class="profile-details-value">123 Azimpur Road</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">City</div>
+                                    <div class="profile-details-value">Dhaka</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Postal Code</div>
+                                    <div class="profile-details-value">1205</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Country</div>
+                                    <div class="profile-details-value">Bangladesh</div>
+                                </div>
+                            </div>
+                            
+                            <div class="profile-details">
+                                <h4><i class="fas fa-id-card"></i> Membership Information</h4>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Membership Type</div>
+                                    <div class="profile-details-value">Gold Member</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Member Since</div>
+                                    <div class="profile-details-value">10 January 2023</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Points Earned</div>
+                                    <div class="profile-details-value">1,250 points</div>
+                                </div>
+                                <div class="profile-details-row">
+                                    <div class="profile-details-label">Next Tier</div>
+                                    <div class="profile-details-value">Platinum (750 points needed)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- QR Tickets Section -->
+                    <div class="tickets-section" id="tickets-section">
+                        <div class="content-area">
+                            <div class="content-header">
+                                <h2 class="content-title">QR Tickets</h2>
+                                <div class="content-action">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-plus me-2"></i> Generate New Ticket
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="ticket-card active">
+                                <div class="ticket-header">
+                                    <h3 class="ticket-title">Uttara North to Agargaon</h3>
+                                    <span class="ticket-status active">Active</span>
+                                </div>
+                                <div class="ticket-details">
+                                    <div class="ticket-qr">
+                                        <img src="https://via.placeholder.com/80x80" alt="QR Code">
+                                    </div>
+                                    <div class="ticket-info">
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Ticket ID</div>
+                                            <div class="ticket-info-value">MR-2023-06-15-001</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">From</div>
+                                            <div class="ticket-info-value">Uttara North</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">To</div>
+                                            <div class="ticket-info-value">Agargaon</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Valid Until</div>
+                                            <div class="ticket-info-value">Today, 11:30 PM</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Fare</div>
+                                            <div class="ticket-info-value">৳60</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ticket-actions">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-download me-2"></i> Download
+                                    </button>
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-times me-2"></i> Cancel
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="ticket-card active">
+                                <div class="ticket-header">
+                                    <h3 class="ticket-title">Agargaon to Uttara North</h3>
+                                    <span class="ticket-status active">Active</span>
+                                </div>
+                                <div class="ticket-details">
+                                    <div class="ticket-qr">
+                                        <img src="https://via.placeholder.com/80x80" alt="QR Code">
+                                    </div>
+                                    <div class="ticket-info">
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Ticket ID</div>
+                                            <div class="ticket-info-value">MR-2023-06-15-002</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">From</div>
+                                            <div class="ticket-info-value">Agargaon</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">To</div>
+                                            <div class="ticket-info-value">Uttara North</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Valid Until</div>
+                                            <div class="ticket-info-value">Today, 11:30 PM</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Fare</div>
+                                            <div class="ticket-info-value">৳60</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ticket-actions">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-download me-2"></i> Download
+                                    </button>
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-times me-2"></i> Cancel
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="ticket-card expired">
+                                <div class="ticket-header">
+                                    <h3 class="ticket-title">Mirpur 10 to Agargaon</h3>
+                                    <span class="ticket-status expired">Expired</span>
+                                </div>
+                                <div class="ticket-details">
+                                    <div class="ticket-qr">
+                                        <img src="https://via.placeholder.com/80x80" alt="QR Code">
+                                    </div>
+                                    <div class="ticket-info">
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Ticket ID</div>
+                                            <div class="ticket-info-value">MR-2023-06-14-003</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">From</div>
+                                            <div class="ticket-info-value">Mirpur 10</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">To</div>
+                                            <div class="ticket-info-value">Agargaon</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Valid Until</div>
+                                            <div class="ticket-info-value">Yesterday, 11:30 PM</div>
+                                        </div>
+                                        <div class="ticket-info-row">
+                                            <div class="ticket-info-label">Fare</div>
+                                            <div class="ticket-info-value">৳40</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ticket-actions">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-download me-2"></i> Download
+                                    </button>
+                                    <button class="btn btn-outline-secondary">
+                                        <i class="fas fa-redo me-2"></i> Buy Again
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Trip History Section -->
+                    <div class="trips-section" id="trips-section">
+                        <div class="content-area">
+                            <div class="content-header">
+                                <h2 class="content-title">Trip History</h2>
+                                <div class="content-action">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-download me-2"></i> Export
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="trip-filters">
+                                <div class="trip-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Search trips...">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="trip-date-filter">
+                                    <select class="form-select">
+                                        <option>All Time</option>
+                                        <option>This Month</option>
+                                        <option>Last Month</option>
+                                        <option>Last 3 Months</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="trip-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Trip ID</th>
+                                            <th>Route</th>
+                                            <th>Date & Time</th>
+                                            <th>Status</th>
+                                            <th>Fare</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="trip-id">TR-001</td>
+                                            <td>
+                                                <div class="trip-route">
+                                                    <span class="trip-station">Uttara North</span>
+                                                    <span class="trip-arrow"><i class="fas fa-arrow-right"></i></span>
+                                                    <span class="trip-station">Agargaon</span>
+                                                </div>
+                                            </td>
+                                            <td class="trip-date">Today, 09:45 AM</td>
+                                            <td><span class="trip-status completed">Completed</span></td>
+                                            <td class="trip-fare">৳60</td>
+                                            <td class="trip-actions">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-receipt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="trip-id">TR-002</td>
+                                            <td>
+                                                <div class="trip-route">
+                                                    <span class="trip-station">Agargaon</span>
+                                                    <span class="trip-arrow"><i class="fas fa-arrow-right"></i></span>
+                                                    <span class="trip-station">Uttara North</span>
+                                                </div>
+                                            </td>
+                                            <td class="trip-date">Yesterday, 06:30 PM</td>
+                                            <td><span class="trip-status completed">Completed</span></td>
+                                            <td class="trip-fare">৳60</td>
+                                            <td class="trip-actions">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-receipt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="trip-id">TR-003</td>
+                                            <td>
+                                                <div class="trip-route">
+                                                    <span class="trip-station">Mirpur 10</span>
+                                                    <span class="trip-arrow"><i class="fas fa-arrow-right"></i></span>
+                                                    <span class="trip-station">Agargaon</span>
+                                                </div>
+                                            </td>
+                                            <td class="trip-date">Yesterday, 10:15 AM</td>
+                                            <td><span class="trip-status completed">Completed</span></td>
+                                            <td class="trip-fare">৳40</td>
+                                            <td class="trip-actions">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-receipt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="trip-id">TR-004</td>
+                                            <td>
+                                                <div class="trip-route">
+                                                    <span class="trip-station">Uttara Center</span>
+                                                    <span class="trip-arrow"><i class="fas fa-arrow-right"></i></span>
+                                                    <span class="trip-station">Mirpur 10</span>
+                                                </div>
+                                            </td>
+                                            <td class="trip-date">15 Jun 2023, 08:30 AM</td>
+                                            <td><span class="trip-status cancelled">Cancelled</span></td>
+                                            <td class="trip-fare">৳60</td>
+                                            <td class="trip-actions">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-receipt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="trip-id">TR-005</td>
+                                            <td>
+                                                <div class="trip-route">
+                                                    <span class="trip-station">Agargaon</span>
+                                                    <span class="trip-arrow"><i class="fas fa-arrow-right"></i></span>
+                                                    <span class="trip-station">Mirpur 10</span>
+                                                </div>
+                                            </td>
+                                            <td class="trip-date">14 Jun 2023, 07:45 PM</td>
+                                            <td><span class="trip-status completed">Completed</span></td>
+                                            <td class="trip-fare">৳40</td>
+                                            <td class="trip-actions">
+                                                <button class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-receipt"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <nav class="trip-pagination">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Methods Section -->
+                    <div class="payment-section" id="payment-section">
+                        <div class="content-area">
+                            <div class="content-header">
+                                <h2 class="content-title">Payment Methods</h2>
+                                <div class="content-action">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-plus me-2"></i> Add New
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-card default">
+                                <div class="payment-icon bkash">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="payment-details">
+                                    <div class="payment-name">
+                                        bKash <span class="badge bg-success">Default</span>
+                                    </div>
+                                    <div class="payment-info">
+                                        Account: 017*******78
+                                    </div>
+                                </div>
+                                <div class="payment-actions">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-card">
+                                <div class="payment-icon nagad">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="payment-details">
+                                    <div class="payment-name">
+                                        Nagad
+                                    </div>
+                                    <div class="payment-info">
+                                        Account: 018*******45
+                                    </div>
+                                </div>
+                                <div class="payment-actions">
+                                    <button class="btn btn-outline-success">
+                                        <i class="fas fa-check"></i> Set Default
+                                    </button>
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-card">
+                                <div class="payment-icon card">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="payment-details">
+                                    <div class="payment-name">
+                                        Visa Card
+                                    </div>
+                                    <div class="payment-info">
+                                        Card: **** **** **** 5678
+                                    </div>
+                                </div>
+                                <div class="payment-actions">
+                                    <button class="btn btn-outline-success">
+                                        <i class="fas fa-check"></i> Set Default
+                                    </button>
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="add-payment-card">
+                                <div class="add-payment-icon">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                                <div class="add-payment-text">Add New Payment Method</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Settings Section -->
+                    <div class="security-section" id="security-section">
+                        <div class="content-area">
+                            <div class="content-header">
+                                <h2 class="content-title">Security Settings</h2>
+                            </div>
+                            
+                            <div class="security-card">
+                                <h4><i class="fas fa-lock"></i> Account Security</h4>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>Password</h5>
+                                        <p>Last changed 30 days ago</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <button class="btn btn-outline-primary">
+                                            <i class="fas fa-key me-2"></i> Change Password
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>Two-Factor Authentication</h5>
+                                        <p>Add an extra layer of security to your account</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <div class="security-status">
+                                            <div class="security-status-icon disabled">
+                                                <i class="fas fa-times"></i>
+                                            </div>
+                                            <div class="security-status-text disabled">Disabled</div>
+                                        </div>
+                                        <button class="btn btn-outline-success ms-3">
+                                            <i class="fas fa-shield-alt me-2"></i> Enable
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>Biometric Login</h5>
+                                        <p>Use fingerprint or face recognition to log in</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <div class="security-status">
+                                            <div class="security-status-icon enabled">
+                                                <i class="fas fa-check"></i>
+                                            </div>
+                                            <div class="security-status-text enabled">Enabled</div>
+                                        </div>
+                                        <button class="btn btn-outline-danger ms-3">
+                                            <i class="fas fa-times me-2"></i> Disable
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="security-card">
+                                <h4><i class="fas fa-history"></i> Login Activity</h4>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>Current Session</h5>
+                                        <p>Dhaka, Bangladesh - Chrome on Windows</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <span class="badge bg-success">Active Now</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>Yesterday, 08:30 PM</h5>
+                                        <p>Dhaka, Bangladesh - Safari on iPhone</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>15 Jun 2023, 10:15 AM</h5>
+                                        <p>Dhaka, Bangladesh - Chrome on Android</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center mt-3">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout from All Devices
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="security-card">
+                                <h4><i class="fas fa-bell"></i> Security Alerts</h4>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>Email Alerts</h5>
+                                        <p>Receive security alerts via email</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="emailAlerts" checked>
+                                            <label class="form-check-label" for="emailAlerts"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>SMS Alerts</h5>
+                                        <p>Receive security alerts via SMS</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="smsAlerts" checked>
+                                            <label class="form-check-label" for="smsAlerts"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="security-item">
+                                    <div class="security-item-info">
+                                        <h5>New Device Login</h5>
+                                        <p>Get notified when someone logs in from a new device</p>
+                                    </div>
+                                    <div class="security-item-action">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="newDeviceAlerts" checked>
+                                            <label class="form-check-label" for="newDeviceAlerts"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifications Section -->
+                    <div class="notifications-section" id="notifications-section">
+                        <div class="content-area">
+                            <div class="content-header">
+                                <h2 class="content-title">Notifications</h2>
+                                <div class="content-action">
+                                    <button class="btn btn-outline-primary">
+                                        <i class="fas fa-check-double me-2"></i> Mark All as Read
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-card unread">
+                                <div class="notification-header">
+                                    <h3 class="notification-title">
+                                        Special Offer <span class="badge bg-danger">New</span>
+                                    </h3>
+                                    <div class="notification-time">Today, 11:30 AM</div>
+                                </div>
+                                <div class="notification-content">
+                                    Get 20% off on your next 5 trips when you use promo code METRO20. Valid until June 30, 2023.
+                                </div>
+                                <div class="notification-actions">
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-external-link-alt me-2"></i> View Details
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-check me-2"></i> Mark as Read
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-card unread">
+                                <div class="notification-header">
+                                    <h3 class="notification-title">
+                                        Account Security <span class="badge bg-warning">Important</span>
+                                    </h3>
+                                    <div class="notification-time">Yesterday, 03:45 PM</div>
+                                </div>
+                                <div class="notification-content">
+                                    We noticed a login to your account from a new device. If this was you, you can ignore this message. If not, please secure your account immediately.
+                                </div>
+                                <div class="notification-actions">
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-shield-alt me-2"></i> Secure Account
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-check me-2"></i> Mark as Read
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-card">
+                                <div class="notification-header">
+                                    <h3 class="notification-title">
+                                        Trip Completed
+                                    </h3>
+                                    <div class="notification-time">Yesterday, 10:15 AM</div>
+                                </div>
+                                <div class="notification-content">
+                                    Your trip from Mirpur 10 to Agargaon has been completed. Thank you for choosing Metro Rail BD.
+                                </div>
+                                <div class="notification-actions">
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-receipt me-2"></i> View Receipt
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash me-2"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-card">
+                                <div class="notification-header">
+                                    <h3 class="notification-title">
+                                        Balance Added
+                                    </h3>
+                                    <div class="notification-time">15 Jun 2023, 05:20 PM</div>
+                                </div>
+                                <div class="notification-content">
+                                    ৳500 has been added to your Metro Rail BD wallet. Your current balance is ৳560.
+                                </div>
+                                <div class="notification-actions">
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-wallet me-2"></i> View Wallet
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash me-2"></i> Delete
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="notification-settings">
+                                <h4><i class="fas fa-bell"></i> Notification Preferences</h4>
+                                
+                                <div class="notification-setting-item">
+                                    <div class="notification-setting-info">
+                                        <h5>Trip Updates</h5>
+                                        <p>Notifications about your trips and tickets</p>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="tripUpdates" checked>
+                                        <label class="form-check-label" for="tripUpdates"></label>
+                                    </div>
+                                </div>
+                                
+                                <div class="notification-setting-item">
+                                    <div class="notification-setting-info">
+                                        <h5>Payment Notifications</h5>
+                                        <p>Notifications about payments and refunds</p>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="paymentNotifications" checked>
+                                        <label class="form-check-label" for="paymentNotifications"></label>
+                                    </div>
+                                </div>
+                                
+                                <div class="notification-setting-item">
+                                    <div class="notification-setting-info">
+                                        <h5>Promotions and Offers</h5>
+                                        <p>Notifications about discounts and special offers</p>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="promotionNotifications" checked>
+                                        <label class="form-check-label" for="promotionNotifications"></label>
+                                    </div>
+                                </div>
+                                
+                                <div class="notification-setting-item">
+                                    <div class="notification-setting-info">
+                                        <h5>System Updates</h5>
+                                        <p>Notifications about system maintenance and updates</p>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="systemUpdates">
+                                        <label class="form-check-label" for="systemUpdates"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Help & Support Section -->
+                    <div class="help-section" id="help-section">
+                        <div class="content-area">
+                            <div class="content-header">
+                                <h2 class="content-title">Help & Support</h2>
+                            </div>
+                            
+                            <div class="help-card">
+                                <h4><i class="fas fa-question-circle"></i> Frequently Asked Questions</h4>
+                                <p>Find answers to the most common questions about Metro Rail BD QR Ticketing System.</p>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        How do I generate a QR ticket?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        To generate a QR ticket, go to the QR Tickets section and click on "Generate New Ticket". Select your starting and destination stations, choose the date and time, and complete the payment. Your QR ticket will be generated instantly.
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        How long is my QR ticket valid?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        QR tickets are valid for the entire day of purchase until 11:59 PM. You can use the ticket anytime during this period for a single journey from the starting station to the destination station.
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        Can I cancel my QR ticket and get a refund?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        Yes, you can cancel your QR ticket and get a refund if the ticket has not been used. Go to the QR Tickets section, find the ticket you want to cancel, and click on the "Cancel" button. The refund will be processed to your wallet balance within 24 hours.
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        How do I add balance to my wallet?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        To add balance to your wallet, go to the Dashboard and click on "Add Balance" in the Quick Actions section. Select your preferred payment method, enter the amount you want to add, and complete the payment. The balance will be instantly added to your wallet.
+                                    </div>
+                                </div>
+                                
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        What should I do if my QR code doesn't scan at the gate?
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="faq-answer">
+                                        If your QR code doesn't scan at the gate, make sure your screen brightness is at maximum and the QR code is clearly visible. If the issue persists, approach the station staff for assistance. They can verify your ticket and help you through the gate.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="help-card">
+                                <h4><i class="fas fa-headset"></i> Contact Support</h4>
+                                <p>Need more help? Contact our support team through any of the following channels:</p>
+                                
+                                <div class="contact-methods">
+                                    <div class="contact-method">
+                                        <div class="contact-method-icon">
+                                            <i class="fas fa-phone-alt"></i>
+                                        </div>
+                                        <div class="contact-method-title">Phone Support</div>
+                                        <div class="contact-method-info">16XXX</div>
+                                        <div class="contact-method-info">24/7 Support</div>
+                                    </div>
+                                    
+                                    <div class="contact-method">
+                                        <div class="contact-method-icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="contact-method-title">Email Support</div>
+                                        <div class="contact-method-info">support@metrorailbd.gov.bd</div>
+                                        <div class="contact-method-info">Response within 24 hours</div>
+                                    </div>
+                                    
+                                    <div class="contact-method">
+                                        <div class="contact-method-icon">
+                                            <i class="fas fa-comments"></i>
+                                        </div>
+                                        <div class="contact-method-title">Live Chat</div>
+                                        <div class="contact-method-info">Available 9 AM - 9 PM</div>
+                                        <div class="contact-method-info">Instant Support</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="help-card">
+                                <h4><i class="fas fa-book"></i> User Guide</h4>
+                                <p>Download our comprehensive user guide to learn more about using the Metro Rail BD QR Ticketing System.</p>
+                                
+                                <div class="text-center mt-4">
+                                    <a href="#" class="btn btn-primary">
+                                        <i class="fas fa-download me-2"></i> Download User Guide (PDF)
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="footer-about">
+                        <div class="footer-logo">
+                            <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                            <span>Metro Rail BD</span>
+                        </div>
+                        <p>Bangladesh's first QR-based metro ticketing system, making urban transportation faster, easier, and more convenient for everyone.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#metro-map">Metro Map</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2">
+                    <h4 class="footer-heading">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2">
+                    <h4 class="footer-heading">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-sm-6 col-lg-2">
+                    <h4 class="footer-heading">Contact</h4>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt me-2"></i> Agargaon, Dhaka</a></li>
+                        <li><a href="#"><i class="fas fa-phone me-2"></i> 16XXX</a></li>
+                        <li><a href="#"><i class="fas fa-envelope me-2"></i> info@metrorailbd.gov.bd</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Metro Rail BD. All rights reserved. A service of Bangladesh Government.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Tab Switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu-link');
+            const sections = document.querySelectorAll('.dashboard-section, .profile-section, .tickets-section, .trips-section, .payment-section, .security-section, .notifications-section, .help-section');
+            
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Hide all sections
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Show the corresponding section
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-section`).classList.add('active');
+                });
+            });
+            
+            // FAQ Accordion
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    
+                    // Toggle active class on question
+                    this.classList.toggle('active');
+                    
+                    // Toggle show class on answer
+                    if (answer.style.display === 'block') {
+                        answer.style.display = 'none';
+                    } else {
+                        answer.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
