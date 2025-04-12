@@ -1,13 +1,10 @@
 /* My Account Styles */
 .my-account-container {
-    padding: 30px 0;
-
     .sidebar {
         background-color: white;
         border-radius: 10px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         padding: 20px;
-        height: 100%;
 
         .sidebar-user {
             display: flex;
@@ -28,7 +25,12 @@
             .user-name {
                 font-weight: 600;
                 font-size: 1.05rem;
-            }   
+            }
+
+            .btn-close {
+                margin-left: auto;
+                display: none;
+            }
         }
 
         .sidebar-menu {
@@ -72,287 +74,324 @@
                         margin-left: auto;
                         background-color: var(--secondary-color);
                         color: white;
-                        font-size: 0.7rem;
-                        padding: 0.25rem 0.5rem;
-                        border-radius: 50px;
+                        border-radius: 50%;
+                        width: 20px;
+                        height: 20px;
+                        font-size: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                     }
                 }
             }
         }
     }
+
+    /* Content Area Styles */
+    .content-wrapper {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 25px;
+        height: 100%;
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+
+            .content-title {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: var(--primary-color);
+                margin: 0;
+            }
+
+            .content-action .btn {
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        .arrow-card-action {
+            color: var(--primary-color);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+
+            i {
+                margin-left: 0.5rem;
+                transition: var(--transition);
+            }
+
+            &:hover i {
+                transform: translateX(3px);
+            }
+        }
+    }
+
+    /* Responsive Adjustments*/
+    @media (max-width: 992px) {
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100%;
+            z-index: 10000;
+            border-radius: 0;
+            transition: right 0.3s ease-in-out;
+
+            .sidebar-user .btn-close {
+                display: block;
+            }
+
+            &.show-sidebar {
+                right: 0;
+            }
+        }
+    }
+
+    @media (max-width: 576px) {
+        .sidebar {
+            right: -100%;
+            width: 100%;
+        }
+    }
 }
 
-/* Content Area Styles */
-.content-area {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 25px;
-    height: 100%;
-}
+/* Dashboard Overview Styles*/
+.dashboard-section {
+    /* Stats Cards */
+    .stats-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        height: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-left: 4px solid var(--primary-color);
 
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-}
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
 
-.content-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    margin: 0;
-}
+        &.balance {
+            border-left-color: var(--success-color);
+        }
 
-.content-action .btn {
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-}
+        &.trips {
+            border-left-color: var(--info-color);
+        }
 
-/* Dashboard Overview */
-.stats-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 20px;
-    height: 100%;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-left: 4px solid var(--primary-color);
-}
+        &.tickets {
+            border-left-color: var(--warning-color);
+        }
 
-.stats-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
+        .stats-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
 
-.stats-card.balance {
-    border-left-color: var(--success-color);
-}
+        &.balance .stats-icon {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
 
-.stats-card.trips {
-    border-left-color: var(--info-color);
-}
+        &.trips .stats-icon {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
 
-.stats-card.tickets {
-    border-left-color: var(--warning-color);
-}
+        &.tickets .stats-icon {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
 
-.stats-card.savings {
-    border-left-color: var(--secondary-color);
-}
+        .stats-title {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            margin-bottom: 5px;
+        }
 
-.stats-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    font-size: 1.5rem;
-}
+        .stats-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
 
-.stats-card.balance .stats-icon {
-    background-color: rgba(40, 167, 69, 0.1);
-    color: var(--success-color);
-}
+            .taka-icon {
+                font-weight: 600;
+            }
+        }
+        
+        .stats-description {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+    }
 
-.stats-card.trips .stats-icon {
-    background-color: rgba(23, 162, 184, 0.1);
-    color: var(--info-color);
-}
+    /* Quick Actions */
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 2fr));
+        gap: 15px;
+        margin-top: 25px;
 
-.stats-card.tickets .stats-icon {
-    background-color: rgba(255, 193, 7, 0.1);
-    color: var(--warning-color);
-}
+        a {
+            background-color: white;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--dark-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
-.stats-card.savings .stats-icon {
-    background-color: rgba(244, 42, 65, 0.1);
-    color: var(--secondary-color);
-}
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+                border-color: var(--primary-color);
+                color: var(--primary-color);
+            }
 
-.stats-title {
-    font-size: 0.9rem;
-    color: var(--gray-color);
-    margin-bottom: 5px;
-}
+            .quick-action-icon {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: rgba(0, 106, 78, 0.1);
+                color: var(--primary-color);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 10px;
+                font-size: 1.5rem;
+            }
 
-.stats-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
+            .quick-action-text {
+                font-weight: 500;
+                font-size: 0.9rem;
+            }
+        }
+    }
 
-.stats-description {
-    font-size: 0.85rem;
-    color: var(--gray-color);
-}
+    /* Recent Activity */
+    .activity-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-top: 25px;
 
-.stats-trend {
-    display: flex;
-    align-items: center;
-    font-size: 0.85rem;
-    margin-top: 10px;
-}
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
 
-.stats-trend.up {
-    color: var(--success-color);
-}
+            h3 {
+                font-size: 1.2rem;
+                font-weight: 600;
+                color: var(--dark-color);
+                margin: 0;
+            }
+        }
 
-.stats-trend.down {
-    color: var(--danger-color);
-}
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
 
-.stats-trend i {
-    margin-right: 5px;
-}
+            .activity-item {
+                display: flex;
+                align-items: flex-start;
+                padding: 15px 0;
+                border-bottom: 1px solid #eee;
 
-/* Recent Activity */
-.activity-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 20px;
-    margin-top: 25px;
-}
+                &:last-child {
+                    border-bottom: none;
+                }
 
-.activity-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
+                .activity-icon {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 15px;
+                    font-size: 1rem;
+                    flex-shrink: 0;
 
-.activity-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--dark-color);
-    margin: 0;
-}
+                    &.ticket {
+                        background-color: rgba(255, 193, 7, 0.1);
+                        color: var(--warning-color);
+                    }
 
-.activity-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+                    &.trip {
+                        background-color: rgba(23, 162, 184, 0.1);
+                        color: var(--info-color);
+                    }
 
-.activity-item {
-    display: flex;
-    align-items: flex-start;
-    padding: 15px 0;
-    border-bottom: 1px solid #eee;
-}
+                    &.payment {
+                        background-color: rgba(40, 167, 69, 0.1);
+                        color: var(--success-color);
+                    }
 
-.activity-item:last-child {
-    border-bottom: none;
-}
+                    &.refund {
+                        background-color: rgba(244, 42, 65, 0.1);
+                        color: var(--secondary-color);
+                    }
+                }
 
-.activity-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-    font-size: 1rem;
-    flex-shrink: 0;
-}
+                .activity-content {
+                    flex-grow: 1;
 
-.activity-icon.ticket {
-    background-color: rgba(255, 193, 7, 0.1);
-    color: var(--warning-color);
-}
+                    .activity-text {
+                        font-size: 0.95rem;
+                        margin-bottom: 5px;
+                    }
 
-.activity-icon.trip {
-    background-color: rgba(23, 162, 184, 0.1);
-    color: var(--info-color);
-}
+                    .activity-time {
+                        font-size: 0.85rem;
+                        color: var(--gray-color);
+                    }
+                }
 
-.activity-icon.payment {
-    background-color: rgba(40, 167, 69, 0.1);
-    color: var(--success-color);
-}
+                .activity-amount {
+                    font-weight: 600;
+                    margin-left: auto;
+                    padding-left: 15px;
+                    text-align: right;
+                    flex-shrink: 0;
 
-.activity-icon.refund {
-    background-color: rgba(244, 42, 65, 0.1);
-    color: var(--secondary-color);
-}
+                    &.credit {
+                        color: var(--success-color);
+                    }
 
-.activity-content {
-    flex-grow: 1;
-}
+                    &.debit {
+                        color: var(--danger-color);
+                    }
+                }
+            }
+        }
+    }
 
-.activity-text {
-    font-size: 0.95rem;
-    margin-bottom: 5px;
-}
-
-.activity-time {
-    font-size: 0.85rem;
-    color: var(--gray-color);
-}
-
-.activity-amount {
-    font-weight: 600;
-    margin-left: auto;
-    padding-left: 15px;
-    text-align: right;
-    flex-shrink: 0;
-}
-
-.activity-amount.credit {
-    color: var(--success-color);
-}
-
-.activity-amount.debit {
-    color: var(--danger-color);
-}
-
-/* Quick Actions */
-.quick-actions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 25px;
-}
-
-.quick-action-btn {
-    background-color: white;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    color: var(--dark-color);
-}
-
-.quick-action-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-}
-
-.quick-action-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: rgba(0, 106, 78, 0.1);
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 10px;
-    font-size: 1.5rem;
-}
-
-.quick-action-text {
-    font-weight: 500;
-    font-size: 0.9rem;
+    /* Responsive Adjustments */
+    @media (max-width: 576px) {
+        .stats-card {
+            padding: 15px;
+        }
+    }
 }

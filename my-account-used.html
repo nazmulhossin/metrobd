@@ -68,23 +68,25 @@
                                 Logout</a></li>
                     </ul>
                 </div>
+                <div class="open-sidebar ms-4" id="openSidebarBtn"><i class="fa-solid fa-list-ul"></i></div>
             </div>
         </div>
     </nav>
 
     <!-- My Account Container -->
-    <div class="my-account-container">
+    <div class="my-account-container py-4">
         <div class="container">
             <div class="row">
                 <!-- Sidebar -->
-                <div class="col-lg-3">
-                    <div class="sidebar">
+                <div class="col-lg-4 col-xl-3">
+                    <div class="sidebar" id="userSidebar">
                         <div class="sidebar-user">
                             <img src="img/user.jpg" alt="User">
                             <div>
                                 <div>Hello,</div>
                                 <div class="user-name">Md Nazmul Hossain</div>
                             </div>
+                            <button type="button" class="btn-close" id="closeSidebarBtn"></button>
                         </div>
                         <ul class="sidebar-menu">
                             <li class="menu-item">
@@ -142,152 +144,113 @@
                 </div>
                 
                 <!-- Content Area -->
-                <div class="col-lg-9">
-                    <!-- Dashboard Section -->
-                    <div class="dashboard-section active">
-                        <div class="content-area">
-                            <div class="content-header">
-                                <h2 class="content-title">Dashboard</h2>
-                                <div class="content-action">
-                                    <button class="btn btn-outline-primary">
-                                        <i class="fas fa-sync-alt me-2"></i> Refresh
-                                    </button>
+                <div class="col-lg-8 col-xl-9">
+                    <div class="content-wrapper dashboard-section">
+                        <div class="content-header">
+                            <h2 class="content-title">Dashboard</h2>
+                            <div class="content-action">
+                                <button class="btn btn-outline-primary">
+                                    <i class="fas fa-sync-alt me-2"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Stats Cards -->
+                        <div class="row g-4">
+                            <div class="col-6 col-md-4">
+                                <div class="stats-card balance">
+                                    <div class="stats-icon"><i class="fas fa-wallet"></i></div>
+                                    <div class="stats-title">Current Balance</div>
+                                    <div class="stats-value"><span class="taka-icon">৳</span>500</div>
+                                    <div class="stats-description">Available for tickets</div>
                                 </div>
                             </div>
-                            
-                            <!-- Stats Cards -->
-                            <div class="row g-4">
-                                <div class="col-md-6 col-lg-3">
-                                    <div class="stats-card balance">
-                                        <div class="stats-icon">
-                                            <i class="fas fa-wallet"></i>
-                                        </div>
-                                        <div class="stats-title">Current Balance</div>
-                                        <div class="stats-value">৳500</div>
-                                        <div class="stats-description">Available for tickets</div>
-                                        <div class="stats-trend up">
-                                            <i class="fas fa-arrow-up"></i> ৳200 from last month
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-3">
-                                    <div class="stats-card trips">
-                                        <div class="stats-icon">
-                                            <i class="fas fa-subway"></i>
-                                        </div>
-                                        <div class="stats-title">Total Trips</div>
-                                        <div class="stats-value">24</div>
-                                        <div class="stats-description">This month</div>
-                                        <div class="stats-trend up">
-                                            <i class="fas fa-arrow-up"></i> 8 more than last month
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-3">
-                                    <div class="stats-card tickets">
-                                        <div class="stats-icon">
-                                            <i class="fas fa-qrcode"></i>
-                                        </div>
-                                        <div class="stats-title">Active Tickets</div>
-                                        <div class="stats-value">2</div>
-                                        <div class="stats-description">Valid for use</div>
-                                        <div class="stats-trend">
-                                            <i class="fas fa-minus"></i> Same as yesterday
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-lg-3">
-                                    <div class="stats-card savings">
-                                        <div class="stats-icon">
-                                            <i class="fas fa-piggy-bank"></i>
-                                        </div>
-                                        <div class="stats-title">Total Savings</div>
-                                        <div class="stats-value">৳1,250</div>
-                                        <div class="stats-description">Using QR tickets</div>
-                                        <div class="stats-trend up">
-                                            <i class="fas fa-arrow-up"></i> ৳350 from last month
-                                        </div>
-                                    </div>
+                            <div class="col-6 col-md-4">
+                                <div class="stats-card trips">
+                                    <div class="stats-icon"><i class="fas fa-subway"></i></div>
+                                    <div class="stats-title">Total Trips</div>
+                                    <div class="stats-value">24</div>
+                                    <div class="stats-description">This month</div>
                                 </div>
                             </div>
-                            
-                            <!-- Quick Actions -->
-                            <div class="quick-actions">
-                                <a href="#" class="quick-action-btn">
-                                    <div class="quick-action-icon">
-                                        <i class="fas fa-qrcode"></i>
-                                    </div>
-                                    <div class="quick-action-text">Generate QR Ticket</div>
-                                </a>
-                                <a href="#" class="quick-action-btn">
-                                    <div class="quick-action-icon">
-                                        <i class="fas fa-wallet"></i>
-                                    </div>
-                                    <div class="quick-action-text">Add Balance</div>
-                                </a>
-                                <a href="#" class="quick-action-btn">
-                                    <div class="quick-action-icon">
-                                        <i class="fas fa-map"></i>
-                                    </div>
-                                    <div class="quick-action-text">View Metro Map</div>
-                                </a>
-                                <a href="#" class="quick-action-btn">
-                                    <div class="quick-action-icon">
-                                        <i class="fas fa-calculator"></i>
-                                    </div>
-                                    <div class="quick-action-text">Fare Calculator</div>
-                                </a>
-                            </div>
-                            
-                            <!-- Recent Activity -->
-                            <div class="activity-card">
-                                <div class="activity-header">
-                                    <h3 class="activity-title">Recent Activity</h3>
-                                    <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                            <div class="col-6 col-md-4">
+                                <div class="stats-card tickets">
+                                    <div class="stats-icon"><i class="fa-solid fa-ticket"></i></div>
+                                    <div class="stats-title">Purchased Tickets</div>
+                                    <div class="stats-value">5</div>
+                                    <div class="stats-description">Valid for use</div>
                                 </div>
-                                <ul class="activity-list">
-                                    <li class="activity-item">
-                                        <div class="activity-icon ticket">
-                                            <i class="fas fa-qrcode"></i>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-text">Generated QR Ticket for Uttara North to Agargaon</div>
-                                            <div class="activity-time">Today, 10:30 AM</div>
-                                        </div>
-                                        <div class="activity-amount debit">-৳60</div>
-                                    </li>
-                                    <li class="activity-item">
-                                        <div class="activity-icon trip">
-                                            <i class="fas fa-subway"></i>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-text">Completed trip from Uttara North to Agargaon</div>
-                                            <div class="activity-time">Today, 09:45 AM</div>
-                                        </div>
-                                        <div class="activity-amount">-</div>
-                                    </li>
-                                    <li class="activity-item">
-                                        <div class="activity-icon payment">
-                                            <i class="fas fa-wallet"></i>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-text">Added balance via bKash</div>
-                                            <div class="activity-time">Yesterday, 05:20 PM</div>
-                                        </div>
-                                        <div class="activity-amount credit">+৳500</div>
-                                    </li>
-                                    <li class="activity-item">
-                                        <div class="activity-icon refund">
-                                            <i class="fas fa-undo"></i>
-                                        </div>
-                                        <div class="activity-content">
-                                            <div class="activity-text">Refund for cancelled ticket</div>
-                                            <div class="activity-time">Yesterday, 02:15 PM</div>
-                                        </div>
-                                        <div class="activity-amount credit">+৳60</div>
-                                    </li>
-                                </ul>
                             </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="quick-actions">
+                            <a href="#">
+                                <div class="quick-action-icon"><i class="fas fa-qrcode"></i></div>
+                                <div class="quick-action-text">Generate QR Ticket</div>
+                            </a>
+                            <a href="#">
+                                <div class="quick-action-icon"><i class="fas fa-wallet"></i></div>
+                                <div class="quick-action-text">Add Balance</div>
+                            </a>
+                            <a href="#">
+                                <div class="quick-action-icon"><i class="fas fa-map"></i></div>
+                                <div class="quick-action-text">View Metro Map</div>
+                            </a>
+                            <a href="#">
+                                <div class="quick-action-icon"><i class="fas fa-calculator"></i></div>
+                                <div class="quick-action-text">Fare Calculator</div>
+                            </a>
+                        </div>
+                        
+                        <!-- Recent Activity -->
+                        <div class="activity-card">
+                            <div class="activity-header">
+                                <h3>Recent Activity</h3>
+                                <a href="#" class="arrow-card-action">View All <i class="fas fa-chevron-right"></i></a>
+                            </div>
+                            <ul class="activity-list">
+                                <li class="activity-item">
+                                    <div class="activity-icon trip"><i class="fas fa-subway"></i></div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">Completed trip from Agargaon to Uttara North using Rapid Pass</div>
+                                        <div class="activity-time">Today, 09:45 AM</div>
+                                    </div>
+                                    <div class="activity-amount debit">-<small class="taka-icon">৳</small>60</div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon trip"><i class="fas fa-subway"></i></div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">Completed trip from Uttara North to Agargaon using Ticket</div>
+                                        <div class="activity-time">Today, 09:45 AM</div>
+                                    </div>
+                                    <div class="activity-amount">-</div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon ticket"><i class="fa-solid fa-ticket"></i></div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">Purchased Ticket for Uttara North to Agargaon</div>
+                                        <div class="activity-time">Today, 10:30 AM</div>
+                                    </div>
+                                    <div class="activity-amount debit">-<small class="taka-icon">৳</small>60</div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon payment"><i class="fas fa-wallet"></i></div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">Added balance via bKash</div>
+                                        <div class="activity-time">Yesterday, 05:20 PM</div>
+                                    </div>
+                                    <div class="activity-amount credit">+<small class="taka-icon">৳</small>500</div>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon refund"><i class="fas fa-undo"></i></div>
+                                    <div class="activity-content">
+                                        <div class="activity-text">Refund for cancelled ticket</div>
+                                        <div class="activity-time">Yesterday, 02:15 PM</div>
+                                    </div>
+                                    <div class="activity-amount credit">+<small class="taka-icon">৳</small>60</div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -398,6 +361,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="js/landing-page.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="js/user.js"></script>
 </body>
 </html>

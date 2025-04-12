@@ -1,13 +1,13 @@
 /* My Account Styles */
 .my-account-container {
-  padding: 30px 0;
+  /* Content Area Styles */
+  /* Responsive Adjustments*/
 }
 .my-account-container .sidebar {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   padding: 20px;
-  height: 100%;
 }
 .my-account-container .sidebar .sidebar-user {
   display: flex;
@@ -28,6 +28,10 @@
 .my-account-container .sidebar .sidebar-user .user-name {
   font-weight: 600;
   font-size: 1.05rem;
+}
+.my-account-container .sidebar .sidebar-user .btn-close {
+  margin-left: auto;
+  display: none;
 }
 .my-account-container .sidebar .sidebar-menu {
   list-style: none;
@@ -66,21 +70,22 @@
   margin-left: auto;
   background-color: var(--secondary-color);
   color: white;
-  font-size: 0.7rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 50px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-/* Content Area Styles */
-.content-area {
+.my-account-container .content-wrapper {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   padding: 25px;
   height: 100%;
 }
-
-.content-header {
+.my-account-container .content-wrapper .content-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -88,21 +93,63 @@
   padding-bottom: 15px;
   border-bottom: 1px solid #eee;
 }
-
-.content-title {
+.my-account-container .content-wrapper .content-header .content-title {
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--primary-color);
   margin: 0;
 }
-
-.content-action .btn {
+.my-account-container .content-wrapper .content-header .content-action .btn {
   padding: 0.5rem 1rem;
+}
+.my-account-container .content-wrapper .arrow-card-action {
+  color: var(--primary-color);
+  font-size: 0.875rem;
   font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+.my-account-container .content-wrapper .arrow-card-action i {
+  margin-left: 0.5rem;
+  transition: var(--transition);
+}
+.my-account-container .content-wrapper .arrow-card-action:hover i {
+  transform: translateX(3px);
+}
+@media (max-width: 992px) {
+  .my-account-container .sidebar {
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 320px;
+    height: 100%;
+    z-index: 10000;
+    border-radius: 0;
+    transition: right 0.3s ease-in-out;
+  }
+  .my-account-container .sidebar .sidebar-user .btn-close {
+    display: block;
+  }
+  .my-account-container .sidebar.show-sidebar {
+    right: 0;
+  }
+}
+@media (max-width: 576px) {
+  .my-account-container .sidebar {
+    right: -100%;
+    width: 100%;
+  }
 }
 
-/* Dashboard Overview */
-.stats-card {
+/* Dashboard Overview Styles*/
+.dashboard-section {
+  /* Stats Cards */
+  /* Quick Actions */
+  /* Recent Activity */
+  /* Responsive Adjustments */
+}
+.dashboard-section .stats-card {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -111,29 +158,20 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-left: 4px solid var(--primary-color);
 }
-
-.stats-card:hover {
+.dashboard-section .stats-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
-
-.stats-card.balance {
+.dashboard-section .stats-card.balance {
   border-left-color: var(--success-color);
 }
-
-.stats-card.trips {
+.dashboard-section .stats-card.trips {
   border-left-color: var(--info-color);
 }
-
-.stats-card.tickets {
+.dashboard-section .stats-card.tickets {
   border-left-color: var(--warning-color);
 }
-
-.stats-card.savings {
-  border-left-color: var(--secondary-color);
-}
-
-.stats-icon {
+.dashboard-section .stats-card .stats-icon {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -143,174 +181,42 @@
   margin-bottom: 15px;
   font-size: 1.5rem;
 }
-
-.stats-card.balance .stats-icon {
+.dashboard-section .stats-card.balance .stats-icon {
   background-color: rgba(40, 167, 69, 0.1);
   color: var(--success-color);
 }
-
-.stats-card.trips .stats-icon {
+.dashboard-section .stats-card.trips .stats-icon {
   background-color: rgba(23, 162, 184, 0.1);
   color: var(--info-color);
 }
-
-.stats-card.tickets .stats-icon {
+.dashboard-section .stats-card.tickets .stats-icon {
   background-color: rgba(255, 193, 7, 0.1);
   color: var(--warning-color);
 }
-
-.stats-card.savings .stats-icon {
-  background-color: rgba(244, 42, 65, 0.1);
-  color: var(--secondary-color);
-}
-
-.stats-title {
+.dashboard-section .stats-card .stats-title {
   font-size: 0.9rem;
   color: var(--gray-color);
   margin-bottom: 5px;
 }
-
-.stats-value {
+.dashboard-section .stats-card .stats-value {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 5px;
 }
-
-.stats-description {
+.dashboard-section .stats-card .stats-value .taka-icon {
+  font-weight: 600;
+}
+.dashboard-section .stats-card .stats-description {
   font-size: 0.85rem;
   color: var(--gray-color);
 }
-
-.stats-trend {
-  display: flex;
-  align-items: center;
-  font-size: 0.85rem;
-  margin-top: 10px;
-}
-
-.stats-trend.up {
-  color: var(--success-color);
-}
-
-.stats-trend.down {
-  color: var(--danger-color);
-}
-
-.stats-trend i {
-  margin-right: 5px;
-}
-
-/* Recent Activity */
-.activity-card {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  margin-top: 25px;
-}
-
-.activity-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.activity-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--dark-color);
-  margin: 0;
-}
-
-.activity-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.activity-item {
-  display: flex;
-  align-items: flex-start;
-  padding: 15px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.activity-item:last-child {
-  border-bottom: none;
-}
-
-.activity-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-
-.activity-icon.ticket {
-  background-color: rgba(255, 193, 7, 0.1);
-  color: var(--warning-color);
-}
-
-.activity-icon.trip {
-  background-color: rgba(23, 162, 184, 0.1);
-  color: var(--info-color);
-}
-
-.activity-icon.payment {
-  background-color: rgba(40, 167, 69, 0.1);
-  color: var(--success-color);
-}
-
-.activity-icon.refund {
-  background-color: rgba(244, 42, 65, 0.1);
-  color: var(--secondary-color);
-}
-
-.activity-content {
-  flex-grow: 1;
-}
-
-.activity-text {
-  font-size: 0.95rem;
-  margin-bottom: 5px;
-}
-
-.activity-time {
-  font-size: 0.85rem;
-  color: var(--gray-color);
-}
-
-.activity-amount {
-  font-weight: 600;
-  margin-left: auto;
-  padding-left: 15px;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.activity-amount.credit {
-  color: var(--success-color);
-}
-
-.activity-amount.debit {
-  color: var(--danger-color);
-}
-
-/* Quick Actions */
-.quick-actions {
+.dashboard-section .quick-actions {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(120px, 2fr));
   gap: 15px;
   margin-top: 25px;
 }
-
-.quick-action-btn {
+.dashboard-section .quick-actions a {
   background-color: white;
   border: 1px solid #eee;
   border-radius: 10px;
@@ -319,16 +225,15 @@
   transition: all 0.3s ease;
   text-decoration: none;
   color: var(--dark-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
-
-.quick-action-btn:hover {
+.dashboard-section .quick-actions a:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   border-color: var(--primary-color);
   color: var(--primary-color);
 }
-
-.quick-action-icon {
+.dashboard-section .quick-actions a .quick-action-icon {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -340,8 +245,96 @@
   margin: 0 auto 10px;
   font-size: 1.5rem;
 }
-
-.quick-action-text {
+.dashboard-section .quick-actions a .quick-action-text {
   font-weight: 500;
   font-size: 0.9rem;
+}
+.dashboard-section .activity-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-top: 25px;
+}
+.dashboard-section .activity-card .activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.dashboard-section .activity-card .activity-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 0;
+}
+.dashboard-section .activity-card .activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.dashboard-section .activity-card .activity-list .activity-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+.dashboard-section .activity-card .activity-list .activity-item:last-child {
+  border-bottom: none;
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-icon.ticket {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: var(--warning-color);
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-icon.trip {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: var(--info-color);
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-icon.payment {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: var(--success-color);
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-icon.refund {
+  background-color: rgba(244, 42, 65, 0.1);
+  color: var(--secondary-color);
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-content {
+  flex-grow: 1;
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-content .activity-text {
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-content .activity-time {
+  font-size: 0.85rem;
+  color: var(--gray-color);
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-amount {
+  font-weight: 600;
+  margin-left: auto;
+  padding-left: 15px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-amount.credit {
+  color: var(--success-color);
+}
+.dashboard-section .activity-card .activity-list .activity-item .activity-amount.debit {
+  color: var(--danger-color);
+}
+@media (max-width: 576px) {
+  .dashboard-section .stats-card {
+    padding: 15px;
+  }
 }

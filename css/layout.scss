@@ -8,6 +8,7 @@
     --warning-color: #ffc107;
     --danger-color: #dc3545;
     --info-color: #17a2b8;
+    --transition: all 0.3s ease;
 }
 
 body {
@@ -98,11 +99,6 @@ body {
         border: 1px solid var(--primary-color);
         padding: 0.25rem 0.75rem;
         border-radius: 50px;
-    
-        .taka-icon {
-            font-family: 'Times New Roman', Times, serif;
-            font-weight: 400;
-        }
     }
     
     .dropdown-menu {
@@ -126,10 +122,29 @@ body {
             margin: 0.5rem 0;
             border-top: 1px solid #eee;
         }
-    }    
+    }
+    
+    .open-sidebar {
+        cursor: pointer;
+        display: none;
+
+        i {
+            font-size: 1.4rem;
+            color: rgba(0, 0, 0, 0.65);
+        }
+    }
 }
 
 /* Common Design */
+.taka-icon {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 400;
+}
+
+small.taka-icon {
+    font-size: 0.8rem;
+}
+
 // Button styles
 .btn-primary {
     background-color: var(--primary-color) !important;
@@ -335,6 +350,12 @@ footer {
 
 /* Responsive Adjustments */
 @media (max-width: 992px) {
+    .navbar {
+        .open-sidebar {
+            display: block;
+        }
+    }
+    
     footer {
         .footer-about {
             margin-bottom: 20px;
