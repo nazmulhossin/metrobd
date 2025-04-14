@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Balance - Bangladesh Metro Rail QR Ticketing System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #006a4e; /* Bangladesh flag green */
+            --primary-light: rgba(0, 106, 78, 0.1);
+            --primary-dark: #005a42;
+            --secondary-color: #f42a41; /* Bangladesh flag red */
+            --accent-color: #ffb81c; /* Gold accent */
+            --dark-color: #333333;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --gray-light: #e9ecef;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar-brand span {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .balance-pill {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .balance-pill i {
+            margin-right: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .main-container {
+            padding: 2rem 0;
+        }
+
+        .dashboard-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .dashboard-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .quick-action {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--dark-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .quick-action:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .quick-action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: white;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .quick-action-text {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* Modal Styles */
+        .modal-header {
+            border-bottom: 1px solid var(--gray-light);
+            padding: 1.25rem 1.5rem;
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid var(--gray-light);
+            padding: 1.25rem 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .amount-input-wrapper {
+            position: relative;
+        }
+
+        .amount-currency {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 500;
+        }
+
+        .amount-input {
+            padding-left: 2rem;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .amount-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .amount-preset-btn {
+            background-color: var(--light-color);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .amount-preset-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .form-info {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+        }
+
+        .form-info i {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-method {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .payment-method:hover {
+            background-color: var(--primary-light);
+        }
+
+        .payment-method.active {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+
+        .payment-method-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .payment-method-icon.bkash {
+            background-color: rgba(226, 19, 110, 0.1);
+            color: #e2136e;
+        }
+
+        .payment-method-icon.nagad {
+            background-color: rgba(244, 42, 65, 0.1);
+            color: #f42a41;
+        }
+
+        .payment-method-icon.rocket {
+            background-color: rgba(140, 52, 148, 0.1);
+            color: #8c3494;
+        }
+
+        .payment-method-icon.card {
+            background-color: rgba(26, 31, 113, 0.1);
+            color: #1a1f71;
+        }
+
+        .payment-method-name {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .transaction-summary {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .transaction-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .transaction-label {
+            color: var(--gray-color);
+        }
+
+        .transaction-value {
+            font-weight: 500;
+        }
+
+        .transaction-divider {
+            height: 1px;
+            background-color: var(--gray-light);
+            margin: 0.5rem 0;
+        }
+
+        .transaction-row.total {
+            font-weight: 700;
+        }
+
+        .confirmation-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+
+        .confirmation-icon.success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .confirmation-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .confirmation-message {
+            text-align: center;
+            color: var(--gray-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation-details {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .confirmation-label {
+            color: var(--gray-color);
+        }
+
+        .confirmation-value {
+            font-weight: 500;
+        }
+
+        @media (max-width: 767.98px) {
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                <span>Metro Rail BD</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tickets</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="balance-pill me-3">
+                        <i class="fas fa-wallet"></i>
+                        <span id="currentBalance">৳500</span>
+                    </div>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <img src="https://via.placeholder.com/36x36" alt="User" class="user-avatar">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h1 class="h3 mb-0">Dashboard</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="dashboard-card">
+                        <div class="dashboard-card-header">
+                            <h3 class="dashboard-card-title">Quick Actions</h3>
+                        </div>
+                        <div class="quick-actions">
+                            <div class="quick-action" id="addBalanceBtn">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="quick-action-text">Add Balance</div>
+                            </div>
+                            <div class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-qrcode"></i>
+                                </div>
+                                <div class="quick-action-text">Generate QR Ticket</div>
+                            </div>
+                            <div class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-map"></i>
+                                </div>
+                                <div class="quick-action-text">View Metro Map</div>
+                            </div>
+                            <div class="quick-action">
+                                <div class="quick-action-icon">
+                                    <i class="fas fa-calculator"></i>
+                                </div>
+                                <div class="quick-action-text">Fare Calculator</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Balance Modal -->
+    <div class="modal fade" id="addBalanceModal" tabindex="-1" aria-labelledby="addBalanceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Step 1: Amount -->
+                <div id="amountStep">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addBalanceModalLabel">Add Balance</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="balanceAmount" class="form-label">Enter Amount (৳)</label>
+                            <div class="amount-input-wrapper">
+                                <span class="amount-currency">৳</span>
+                                <input type="number" class="form-control amount-input" id="balanceAmount" placeholder="0" min="100" max="10000" value="500">
+                            </div>
+                        </div>
+                        <div class="amount-presets">
+                            <button class="amount-preset-btn" data-amount="100">৳100</button>
+                            <button class="amount-preset-btn" data-amount="200">৳200</button>
+                            <button class="amount-preset-btn" data-amount="500">৳500</button>
+                            <button class="amount-preset-btn" data-amount="1000">৳1000</button>
+                        </div>
+                        <div class="form-info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Minimum ৳100, Maximum ৳10,000 per transaction</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="continueToPaymentBtn">Continue to Payment</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Payment Method -->
+                <div id="paymentMethodStep" style="display: none;">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Select Payment Method</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="payment-methods">
+                            <div class="payment-method active" data-method="bkash">
+                                <div class="payment-method-icon bkash">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="payment-method-name">bKash</div>
+                            </div>
+                            <div class="payment-method" data-method="nagad">
+                                <div class="payment-method-icon nagad">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="payment-method-name">Nagad</div>
+                            </div>
+                            <div class="payment-method" data-method="rocket">
+                                <div class="payment-method-icon rocket">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="payment-method-name">Rocket</div>
+                            </div>
+                            <div class="payment-method" data-method="card">
+                                <div class="payment-method-icon card">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="payment-method-name">Card</div>
+                            </div>
+                        </div>
+                        
+                        <div id="bkashDetails">
+                            <div class="mb-3">
+                                <label class="form-label">bKash Number</label>
+                                <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                            </div>
+                        </div>
+                        
+                        <div id="nagadDetails" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">Nagad Number</label>
+                                <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                            </div>
+                        </div>
+                        
+                        <div id="rocketDetails" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">Rocket Number</label>
+                                <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                            </div>
+                        </div>
+                        
+                        <div id="cardDetails" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">Card Number</label>
+                                <input type="text" class="form-control" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">CVV</label>
+                                    <input type="password" class="form-control" placeholder="XXX" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="transaction-summary">
+                            <div class="transaction-row">
+                                <div class="transaction-label">Amount</div>
+                                <div class="transaction-value" id="summaryAmount">৳500</div>
+                            </div>
+                            <div class="transaction-row">
+                                <div class="transaction-label">Fee</div>
+                                <div class="transaction-value">৳0</div>
+                            </div>
+                            <div class="transaction-divider"></div>
+                            <div class="transaction-row total">
+                                <div class="transaction-label">Total</div>
+                                <div class="transaction-value" id="summaryTotal">৳500</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="backToAmountBtn">Back</button>
+                        <button type="button" class="btn btn-primary" id="confirmPaymentBtn">Confirm Payment</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Confirmation -->
+                <div id="confirmationStep" style="display: none;">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Payment Successful</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="confirmation-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h4 class="confirmation-title">Payment Successful!</h4>
+                        <p class="confirmation-message">Your wallet has been topped up with <span id="confirmationAmount">৳500</span>.</p>
+                        <div class="confirmation-details">
+                            <div class="confirmation-row">
+                                <div class="confirmation-label">Transaction ID</div>
+                                <div class="confirmation-value">MR-TX-2025061501</div>
+                            </div>
+                            <div class="confirmation-row">
+                                <div class="confirmation-label">Date & Time</div>
+                                <div class="confirmation-value">15 Jun 2025, 10:30 AM</div>
+                            </div>
+                            <div class="confirmation-row">
+                                <div class="confirmation-label">Payment Method</div>
+                                <div class="confirmation-value" id="confirmationMethod">bKash</div>
+                            </div>
+                            <div class="confirmation-row">
+                                <div class="confirmation-label">New Balance</div>
+                                <div class="confirmation-value">৳1,000</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="doneBtn" data-bs-dismiss="modal">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Initialize variables
+        const addBalanceModal = document.getElementById('addBalanceModal');
+        const addBalanceBtn = document.getElementById('addBalanceBtn');
+        const balanceAmount = document.getElementById('balanceAmount');
+        const amountPresetBtns = document.querySelectorAll('.amount-preset-btn');
+        const continueToPaymentBtn = document.getElementById('continueToPaymentBtn');
+        const backToAmountBtn = document.getElementById('backToAmountBtn');
+        const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+        const doneBtn = document.getElementById('doneBtn');
+        const amountStep = document.getElementById('amountStep');
+        const paymentMethodStep = document.getElementById('paymentMethodStep');
+        const confirmationStep = document.getElementById('confirmationStep');
+        const summaryAmount = document.getElementById('summaryAmount');
+        const summaryTotal = document.getElementById('summaryTotal');
+        const confirmationAmount = document.getElementById('confirmationAmount');
+        const confirmationMethod = document.getElementById('confirmationMethod');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const currentBalance = document.getElementById('currentBalance');
+
+        // Create Bootstrap modal instance
+        const modal = new bootstrap.Modal(addBalanceModal);
+
+        // Add Balance button click
+        addBalanceBtn.addEventListener('click', function() {
+            resetAddBalanceForm();
+            modal.show();
+        });
+
+        function resetAddBalanceForm() {
+            // Reset to first step
+            amountStep.style.display = 'block';
+            paymentMethodStep.style.display = 'none';
+            confirmationStep.style.display = 'none';
+            
+            // Reset amount
+            balanceAmount.value = '500';
+            updateSummaryAmount();
+            
+            // Reset payment method
+            paymentMethods.forEach((method, index) => {
+                if (index === 0) {
+                    method.classList.add('active');
+                } else {
+                    method.classList.remove('active');
+                }
+            });
+            
+            // Show first payment details, hide others
+            document.getElementById('bkashDetails').style.display = 'block';
+            document.getElementById('nagadDetails').style.display = 'none';
+            document.getElementById('rocketDetails').style.display = 'none';
+            document.getElementById('cardDetails').style.display = 'none';
+        }
+
+        function updateSummaryAmount() {
+            const amount = balanceAmount.value;
+            summaryAmount.textContent = `৳${amount}`;
+            summaryTotal.textContent = `৳${amount}`;
+            confirmationAmount.textContent = `৳${amount}`;
+        }
+
+        // Amount preset buttons
+        amountPresetBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const amount = this.getAttribute('data-amount');
+                balanceAmount.value = amount;
+                updateSummaryAmount();
+            });
+        });
+
+        // Amount input change
+        balanceAmount.addEventListener('input', updateSummaryAmount);
+
+        // Continue to payment button
+        continueToPaymentBtn.addEventListener('click', function() {
+            amountStep.style.display = 'none';
+            paymentMethodStep.style.display = 'block';
+        });
+
+        // Back to amount button
+        backToAmountBtn.addEventListener('click', function() {
+            paymentMethodStep.style.display = 'none';
+            amountStep.style.display = 'block';
+        });
+
+        // Payment method selection
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', function() {
+                // Remove active class from all methods
+                paymentMethods.forEach(m => m.classList.remove('active'));
+                
+                // Add active class to clicked method
+                this.classList.add('active');
+                
+                // Show corresponding payment details
+                const selectedMethod = this.getAttribute('data-method');
+                document.getElementById('bkashDetails').style.display = 'none';
+                document.getElementById('nagadDetails').style.display = 'none';
+                document.getElementById('rocketDetails').style.display = 'none';
+                document.getElementById('cardDetails').style.display = 'none';
+                document.getElementById(`${selectedMethod}Details`).style.display = 'block';
+                
+                // Update confirmation method
+                confirmationMethod.textContent = this.querySelector('.payment-method-name').textContent;
+            });
+        });
+
+        // Confirm payment button
+        confirmPaymentBtn.addEventListener('click', function() {
+            paymentMethodStep.style.display = 'none';
+            confirmationStep.style.display = 'block';
+        });
+
+        // Done button
+        doneBtn.addEventListener('click', function() {
+            // Update balance in header (this would normally come from the server)
+            const newBalance = 1000; // This would be calculated based on the server response
+            currentBalance.textContent = `৳${newBalance}`;
+        });
+    </script>
+</body>
+</html>

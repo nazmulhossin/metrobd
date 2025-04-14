@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet - Dhaka Metro Rail</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #006a4e; /* Bangladesh flag green */
+            --primary-light: rgba(0, 106, 78, 0.1);
+            --primary-dark: #005a42;
+            --secondary-color: #f42a41; /* Bangladesh flag red */
+            --secondary-light: rgba(244, 42, 65, 0.1);
+            --accent-color: #ffb81c; /* Gold accent */
+            --dark-color: #333333;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --gray-light: #e9ecef;
+            --gray-lighter: #f8f9fa;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --white: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark-color);
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            margin-left: 2rem;
+        }
+
+        .nav-link {
+            color: var(--dark-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-icon {
+            position: relative;
+            color: var(--dark-color);
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .balance-pill {
+            background-color: var(--light-color);
+            border: 1px solid var(--gray-light);
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-dropdown {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+        }
+
+        .user-dropdown:hover {
+            background-color: var(--light-color);
+        }
+
+        .user-name {
+            margin-right: 0.5rem;
+            font-weight: 500;
+        }
+
+        .dropdown-icon {
+            font-size: 0.8rem;
+            color: var(--gray-color);
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 73px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--white);
+            border-right: 1px solid var(--gray-light);
+            padding: 1.5rem 0;
+            height: calc(100vh - 73px);
+            position: sticky;
+            top: 73px;
+            overflow-y: auto;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--gray-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .user-avatar i {
+            font-size: 1.5rem;
+            color: var(--gray-color);
+        }
+
+        .user-info h5 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--gray-color);
+            font-weight: 400;
+        }
+
+        .user-info p {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .sidebar-menu-link:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .sidebar-menu-link.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        .sidebar-menu-icon {
+            margin-right: 0.875rem;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-menu-text {
+            flex-grow: 1;
+        }
+
+        .sidebar-menu-badge {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+
+        /* Content Area */
+        .content-wrapper {
+            flex: 1;
+            padding: 2rem;
+            background-color: #f5f7fa;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .refresh-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: var(--white);
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius-sm);
+            color: var(--dark-color);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .refresh-btn:hover {
+            background-color: var(--gray-lighter);
+        }
+
+        .refresh-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid transparent;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card.green {
+            border-left-color: var(--primary-color);
+        }
+
+        .stat-card.blue {
+            border-left-color: var(--info-color);
+        }
+
+        .stat-card.yellow {
+            border-left-color: var(--warning-color);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.green {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .stat-icon.blue {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
+
+        .stat-icon.yellow {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .stat-title {
+            color: var(--gray-color);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-subtitle {
+            color: var(--gray-color);
+            font-size: 0.875rem;
+        }
+
+        /* Action Cards */
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--dark-color);
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .action-icon.green {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .action-icon.blue {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
+
+        .action-icon.yellow {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .action-icon.gray {
+            background-color: var(--gray-light);
+            color: var(--gray-color);
+        }
+
+        .action-title {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        /* Wallet Section */
+        .wallet-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .view-all {
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .view-all i {
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Transaction History */
+        .transaction-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .transaction-title {
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .transaction-filter {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-label {
+            margin-right: 0.5rem;
+            color: var(--gray-color);
+            font-size: 0.875rem;
+        }
+
+        .filter-select {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.875rem;
+        }
+
+        .transaction-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-item:hover {
+            background-color: var(--gray-lighter);
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .transaction-icon.trip {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
+
+        .transaction-icon.topup {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .transaction-icon.ticket {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .transaction-content {
+            flex-grow: 1;
+        }
+
+        .transaction-text {
+            margin: 0 0 0.25rem;
+            font-weight: 500;
+        }
+
+        .transaction-date {
+            color: var(--gray-color);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            margin-left: 1rem;
+            flex-shrink: 0;
+        }
+
+        .transaction-amount.debit {
+            color: var(--danger-color);
+        }
+
+        .transaction-amount.credit {
+            color: var(--success-color);
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-title {
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .add-method {
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .add-method i {
+            margin-right: 0.5rem;
+        }
+
+        .payment-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .payment-card {
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius-sm);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .payment-card:hover {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+
+        .payment-card.active {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+
+        .payment-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            font-size: 1.25rem;
+        }
+
+        .payment-card-icon.bkash {
+            background-color: rgba(226, 19, 110, 0.1);
+            color: #e2136e;
+        }
+
+        .payment-card-icon.nagad {
+            background-color: rgba(244, 42, 65, 0.1);
+            color: #f42a41;
+        }
+
+        .payment-card-icon.rocket {
+            background-color: rgba(140, 52, 148, 0.1);
+            color: #8c3494;
+        }
+
+        .payment-card-icon.card {
+            background-color: rgba(26, 31, 113, 0.1);
+            color: #1a1f71;
+        }
+
+        .payment-card-content {
+            flex-grow: 1;
+        }
+
+        .payment-card-title {
+            font-weight: 500;
+            margin: 0 0 0.25rem;
+        }
+
+        .payment-card-number {
+            color: var(--gray-color);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* Wallet Cards */
+        .wallet-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .wallet-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-card.primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--white);
+        }
+
+        .wallet-card-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            opacity: 0.1;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .wallet-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .wallet-card-label {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .wallet-card-balance {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .wallet-card-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .wallet-card-name {
+            font-weight: 500;
+        }
+
+        .wallet-card-type {
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .wallet-card-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .wallet-card-action {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .wallet-card-action:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .wallet-card.secondary {
+            background: linear-gradient(135deg, var(--info-color), #0f8599);
+            color: var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 1199.98px) {
+            .action-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .wallet-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Add Balance Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--gray-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background-color: var(--gray-light);
+            color: var(--dark-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-outline-primary {
+            background-color: transparent;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        /* Wallet Balance Card */
+        .wallet-balance-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border-radius: var(--border-radius-md);
+            color: var(--white);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-balance-pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            opacity: 0.1;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .wallet-balance-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .wallet-balance-label {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .wallet-balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .wallet-balance-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .wallet-balance-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius-sm);
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wallet-balance-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .wallet-balance-btn i {
+            margin-right: 0.5rem;
+        }
+
+        /* Transaction History */
+        .transaction-history {
+            background-color: var(--white);
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+
+        .transaction-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .transaction-history-title {
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .transaction-history-filter {
+            display: flex;
+            align-items: center;
+        }
+
+        .transaction-history-filter-label {
+            margin-right: 0.5rem;
+            color: var(--gray-color);
+            font-size: 0.875rem;
+        }
+
+        .transaction-history-filter-select {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.875rem;
+        }
+
+        .transaction-history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .transaction-history-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+
+        .transaction-history-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-history-item:hover {
+            background-color: var(--gray-lighter);
+        }
+
+        .transaction-history-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .transaction-history-icon.trip {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+        }
+
+        .transaction-history-icon.topup {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .transaction-history-icon.ticket {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+        }
+
+        .transaction-history-content {
+            flex-grow: 1;
+        }
+
+        .transaction-history-text {
+            margin: 0 0 0.25rem;
+            font-weight: 500;
+        }
+
+        .transaction-history-date {
+            color: var(--gray-color);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .transaction-history-amount {
+            font-weight: 600;
+            margin-left: 1rem;
+            flex-shrink: 0;
+        }
+
+        .transaction-history-amount.debit {
+            color: var(--danger-color);
+        }
+
+        .transaction-history-amount.credit {
+            color: var(--success-color);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .pagination-item {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .pagination-item:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .pagination-item.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .pagination-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <a href="#" class="logo">
+                    <img src="/placeholder.svg?height=40&width=40" alt="Dhaka Metro Rail Logo">
+                    <span class="logo-text">Dhaka Metro Rail</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#" class="nav-link">Home</a>
+                    <a href="#" class="nav-link">Map & Routes</a>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="#" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge">5</span>
+                </a>
+                <div class="balance-pill">
+                    Balance: ৳500
+                </div>
+                <div class="user-dropdown">
+                    <span class="user-name">Md Nazmul Hossain</span>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <h5>Hello,</h5>
+                    <p>Md Nazmul Hossain</p>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="fas fa-tachometer-alt sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="fas fa-user sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">My Profile</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="fas fa-qrcode sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">My QR Tickets</span>
+                        <span class="sidebar-menu-badge">5</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="fas fa-history sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">Trip History</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link active">
+                        <i class="fas fa-wallet sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">My Wallet</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="fas fa-credit-card sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">Payment Methods</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="fas fa-shield-alt sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">Security Settings</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="fas fa-bell sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">Notifications</span>
+                        <span class="sidebar-menu-badge">3</span>
+                    </a>
+                </li>
+                <li class="sidebar-menu-item">
+                    <a href="#" class="sidebar-menu-link">
+                        <i class="fas fa-question-circle sidebar-menu-icon"></i>
+                        <span class="sidebar-menu-text">Help & Support</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-wrapper">
+            <div class="content-header">
+                <h1 class="page-title">My Wallet</h1>
+                <button class="refresh-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <!-- Wallet Balance Card -->
+            <div class="wallet-balance-card">
+                <div class="wallet-balance-pattern"></div>
+                <div class="wallet-balance-content">
+                    <div class="wallet-balance-label">Current Balance</div>
+                    <div class="wallet-balance-amount">৳500</div>
+                    <div class="wallet-balance-actions">
+                        <button class="wallet-balance-btn">
+                            <i class="fas fa-plus"></i> Add Balance
+                        </button>
+                        <button class="wallet-balance-btn">
+                            <i class="fas fa-qrcode"></i> Generate QR Ticket
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-cards">
+                <div class="stat-card green">
+                    <div class="stat-icon green">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="stat-title">Total Top-ups</div>
+                    <div class="stat-value">৳2,500</div>
+                    <div class="stat-subtitle">Last 30 days</div>
+                </div>
+                <div class="stat-card blue">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-train"></i>
+                    </div>
+                    <div class="stat-title">Total Trips</div>
+                    <div class="stat-value">24</div>
+                    <div class="stat-subtitle">This month</div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-icon yellow">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="stat-title">Purchased Tickets</div>
+                    <div class="stat-value">5</div>
+                    <div class="stat-subtitle">Valid for use</div>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-methods">
+                <div class="payment-header">
+                    <h3 class="payment-title">Payment Methods</h3>
+                    <a href="#" class="add-method">
+                        <i class="fas fa-plus"></i> Add New
+                    </a>
+                </div>
+                <div class="payment-list">
+                    <div class="payment-card active">
+                        <div class="payment-card-icon bkash">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="payment-card-content">
+                            <h4 class="payment-card-title">bKash</h4>
+                            <p class="payment-card-number">**** 5678</p>
+                        </div>
+                    </div>
+                    <div class="payment-card">
+                        <div class="payment-card-icon nagad">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="payment-card-content">
+                            <h4 class="payment-card-title">Nagad</h4>
+                            <p class="payment-card-number">**** 1234</p>
+                        </div>
+                    </div>
+                    <div class="payment-card">
+                        <div class="payment-card-icon card">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="payment-card-content">
+                            <h4 class="payment-card-title">Visa Card</h4>
+                            <p class="payment-card-number">**** 9012</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction History -->
+            <div class="wallet-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Transactions</h2>
+                    <a href="#" class="view-all">
+                        View All <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                <div class="transaction-history">
+                    <div class="transaction-history-header">
+                        <h3 class="transaction-history-title">Transaction History</h3>
+                        <div class="transaction-history-filter">
+                            <span class="transaction-history-filter-label">Filter:</span>
+                            <select class="transaction-history-filter-select">
+                                <option value="all">All Transactions</option>
+                                <option value="topup">Top-ups</option>
+                                <option value="trip">Trips</option>
+                                <option value="ticket">Tickets</option>
+                            </select>
+                        </div>
+                    </div>
+                    <ul class="transaction-history-list">
+                        <li class="transaction-history-item">
+                            <div class="transaction-history-icon trip">
+                                <i class="fas fa-train"></i>
+                            </div>
+                            <div class="transaction-history-content">
+                                <p class="transaction-history-text">Completed trip from Agargaon to Uttara North using Rapid Pass</p>
+                                <p class="transaction-history-date">Today, 09:45 AM</p>
+                            </div>
+                            <div class="transaction-history-amount debit">-৳60</div>
+                        </li>
+                        <li class="transaction-history-item">
+                            <div class="transaction-history-icon trip">
+                                <i class="fas fa-train"></i>
+                            </div>
+                            <div class="transaction-history-content">
+                                <p class="transaction-history-text">Completed trip from Uttara North to Agargaon using Ticket</p>
+                                <p class="transaction-history-date">Yesterday, 05:30 PM</p>
+                            </div>
+                            <div class="transaction-history-amount debit">-৳60</div>
+                        </li>
+                        <li class="transaction-history-item">
+                            <div class="transaction-history-icon topup">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="transaction-history-content">
+                                <p class="transaction-history-text">Added balance via bKash</p>
+                                <p class="transaction-history-date">14 Jun 2025, 02:15 PM</p>
+                            </div>
+                            <div class="transaction-history-amount credit">+৳500</div>
+                        </li>
+                        <li class="transaction-history-item">
+                            <div class="transaction-history-icon ticket">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <div class="transaction-history-content">
+                                <p class="transaction-history-text">Purchased QR Ticket - Uttara North to Motijheel</p>
+                                <p class="transaction-history-date">12 Jun 2025, 10:30 AM</p>
+                            </div>
+                            <div class="transaction-history-amount debit">-৳100</div>
+                        </li>
+                        <li class="transaction-history-item">
+                            <div class="transaction-history-icon trip">
+                                <i class="fas fa-train"></i>
+                            </div>
+                            <div class="transaction-history-content">
+                                <p class="transaction-history-text">Completed trip from Mirpur to Agargaon using Rapid Pass</p>
+                                <p class="transaction-history-date">10 Jun 2025, 08:45 AM</p>
+                            </div>
+                            <div class="transaction-history-amount debit">-৳40</div>
+                        </li>
+                    </ul>
+                    <div class="pagination">
+                        <div class="pagination-item disabled">
+                            <i class="fas fa-chevron-left"></i>
+                        </div>
+                        <div class="pagination-item active">1</div>
+                        <div class="pagination-item">2</div>
+                        <div class="pagination-item">3</div>
+                        <div class="pagination-item">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Balance Modal -->
+    <div class="modal-overlay" id="addBalanceModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Balance</h3>
+                <button class="modal-close" id="closeAddBalanceModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="add-balance-form">
+                    <div class="form-step active" id="amountStep">
+                        <div class="form-group">
+                            <label class="form-label">Enter Amount (৳)</label>
+                            <div class="amount-input-wrapper">
+                                <span class="amount-currency">৳</span>
+                                <input type="number" class="form-control amount-input" id="balanceAmount" placeholder="0" min="100" max="10000" value="500">
+                            </div>
+                        </div>
+                        <div class="amount-presets">
+                            <button class="amount-preset-btn" data-amount="100">৳100</button>
+                            <button class="amount-preset-btn" data-amount="200">৳200</button>
+                            <button class="amount-preset-btn" data-amount="500">৳500</button>
+                            <button class="amount-preset-btn" data-amount="1000">৳1000</button>
+                        </div>
+                        <button class="btn btn-primary btn-block" id="continueToPaymentBtn">Continue to Payment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Add Balance Modal
+        const addBalanceModal = document.getElementById('addBalanceModal');
+        const closeAddBalanceModal = document.getElementById('closeAddBalanceModal');
+        const addBalanceBtn = document.querySelector('.wallet-balance-btn');
+
+        // Open modal when Add Balance button is clicked
+        addBalanceBtn.addEventListener('click', function() {
+            addBalanceModal.classList.add('show');
+        });
+
+        // Close modal when close button is clicked
+        closeAddBalanceModal.addEventListener('click', function() {
+            addBalanceModal.classList.remove('show');
+        });
+
+        // Close modal when clicking outside
+        addBalanceModal.addEventListener('click', function(e) {
+            if (e.target === addBalanceModal) {
+                addBalanceModal.classList.remove('show');
+            }
+        });
+
+        // Amount preset buttons
+        const amountPresetBtns = document.querySelectorAll('.amount-preset-btn');
+        const balanceAmount = document.getElementById('balanceAmount');
+
+        amountPresetBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const amount = this.getAttribute('data-amount');
+                balanceAmount.value = amount;
+            });
+        });
+
+        // Refresh button animation
+        const refreshBtn = document.querySelector('.refresh-btn');
+        refreshBtn.addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            icon.classList.add('fa-spin');
+            setTimeout(() => {
+                icon.classList.remove('fa-spin');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

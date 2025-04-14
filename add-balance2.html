@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Balance - Bangladesh Metro Rail QR Ticketing System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #006a4e; /* Bangladesh flag green */
+            --primary-light: rgba(0, 106, 78, 0.1);
+            --primary-dark: #005a42;
+            --secondary-color: #f42a41; /* Bangladesh flag red */
+            --accent-color: #ffb81c; /* Gold accent */
+            --dark-color: #333333;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --gray-light: #e9ecef;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .navbar-brand span {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .balance-pill {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .balance-pill i {
+            margin-right: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .main-container {
+            padding: 2rem 0;
+            flex: 1;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--gray-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--primary-color);
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--gray-light);
+            padding: 1.25rem 1.5rem;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 2.5rem;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--gray-light);
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--gray-light);
+            color: var(--gray-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step.active .step-number {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .step.completed .step-number::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+        }
+
+        .step-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--gray-color);
+        }
+
+        .step.active .step-title {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .step.completed .step-title {
+            color: var(--success-color);
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .amount-input-wrapper {
+            position: relative;
+        }
+
+        .amount-currency {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 500;
+        }
+
+        .amount-input {
+            padding-left: 2rem;
+            font-size: 1.25rem;
+            font-weight: 500;
+        }
+
+        .amount-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .amount-preset-btn {
+            background-color: var(--light-color);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .amount-preset-btn:hover, .amount-preset-btn.active {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .form-info {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: rgba(23, 162, 184, 0.1);
+            color: var(--info-color);
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+        }
+
+        .form-info i {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-method {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .payment-method:hover {
+            background-color: var(--primary-light);
+        }
+
+        .payment-method.active {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+        }
+
+        .payment-method-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .payment-method-icon.bkash {
+            background-color: rgba(226, 19, 110, 0.1);
+            color: #e2136e;
+        }
+
+        .payment-method-icon.nagad {
+            background-color: rgba(244, 42, 65, 0.1);
+            color: #f42a41;
+        }
+
+        .payment-method-icon.rocket {
+            background-color: rgba(140, 52, 148, 0.1);
+            color: #8c3494;
+        }
+
+        .payment-method-icon.card {
+            background-color: rgba(26, 31, 113, 0.1);
+            color: #1a1f71;
+        }
+
+        .payment-method-name {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .transaction-summary {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .transaction-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .transaction-label {
+            color: var(--gray-color);
+        }
+
+        .transaction-value {
+            font-weight: 500;
+        }
+
+        .transaction-divider {
+            height: 1px;
+            background-color: var(--gray-light);
+            margin: 0.5rem 0;
+        }
+
+        .transaction-row.total {
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover, .btn-outline-primary:focus {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .confirmation-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+
+        .confirmation-icon.success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .confirmation-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .confirmation-message {
+            text-align: center;
+            color: var(--gray-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation-details {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .confirmation-label {
+            color: var(--gray-color);
+        }
+
+        .confirmation-value {
+            font-weight: 500;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .help-card {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .help-card h5 {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .help-card p {
+            color: var(--gray-color);
+            margin-bottom: 1.25rem;
+        }
+
+        .help-card .btn {
+            width: 100%;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .footer-logo span {
+            font-weight: 700;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 767.98px) {
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .amount-presets {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .step:not(:last-child)::after {
+                top: 2.5rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                <span>Metro Rail BD</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="user-dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Add Balance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My Tickets</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="balance-pill me-3">
+                        <i class="fas fa-wallet"></i>
+                        <span id="currentBalance">৳500</span>
+                    </div>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <img src="https://via.placeholder.com/36x36" alt="User" class="user-avatar">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Add Balance</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="user-dashboard.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Balance</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Step Indicator -->
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="step-indicator">
+                                <div class="step active" id="step1Indicator">
+                                    <div class="step-number">1</div>
+                                    <div class="step-title">Enter Amount</div>
+                                </div>
+                                <div class="step" id="step2Indicator">
+                                    <div class="step-number">2</div>
+                                    <div class="step-title">Payment Method</div>
+                                </div>
+                                <div class="step" id="step3Indicator">
+                                    <div class="step-number">3</div>
+                                    <div class="step-title">Confirmation</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Amount Selection -->
+                    <div class="card step-content active" id="step1Content">
+                        <div class="card-header">
+                            <h5>Enter Amount</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="balanceAmount" class="form-label">Enter Amount (৳)</label>
+                                <div class="amount-input-wrapper">
+                                    <span class="amount-currency">৳</span>
+                                    <input type="number" class="form-control amount-input" id="balanceAmount" placeholder="0" min="100" max="10000" value="500">
+                                </div>
+                            </div>
+                            <div class="amount-presets">
+                                <button class="amount-preset-btn active" data-amount="100">৳100</button>
+                                <button class="amount-preset-btn" data-amount="200">৳200</button>
+                                <button class="amount-preset-btn" data-amount="500">৳500</button>
+                                <button class="amount-preset-btn" data-amount="1000">৳1000</button>
+                            </div>
+                            <div class="form-info">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Minimum ৳100, Maximum ৳10,000 per transaction</span>
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary" id="continueToPaymentBtn">Continue to Payment</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Payment Method -->
+                    <div class="card step-content" id="step2Content">
+                        <div class="card-header">
+                            <h5>Select Payment Method</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label class="form-label">Select Payment Method</label>
+                                <div class="payment-methods">
+                                    <div class="payment-method active" data-method="bkash">
+                                        <div class="payment-method-icon bkash">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="payment-method-name">bKash</div>
+                                    </div>
+                                    <div class="payment-method" data-method="nagad">
+                                        <div class="payment-method-icon nagad">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="payment-method-name">Nagad</div>
+                                    </div>
+                                    <div class="payment-method" data-method="rocket">
+                                        <div class="payment-method-icon rocket">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="payment-method-name">Rocket</div>
+                                    </div>
+                                    <div class="payment-method" data-method="card">
+                                        <div class="payment-method-icon card">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <div class="payment-method-name">Card</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="paymentDetailsContainer">
+                                <div id="bkashDetails">
+                                    <div class="mb-3">
+                                        <label class="form-label">bKash Number</label>
+                                        <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                                    </div>
+                                </div>
+                                
+                                <div id="nagadDetails" style="display: none;">
+                                    <div class="mb-3">
+                                        <label class="form-label">Nagad Number</label>
+                                        <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                                    </div>
+                                </div>
+                                
+                                <div id="rocketDetails" style="display: none;">
+                                    <div class="mb-3">
+                                        <label class="form-label">Rocket Number</label>
+                                        <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                                    </div>
+                                </div>
+                                
+                                <div id="cardDetails" style="display: none;">
+                                    <div class="mb-3">
+                                        <label class="form-label">Card Number</label>
+                                        <input type="text" class="form-control" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Expiry Date</label>
+                                            <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">CVV</label>
+                                            <input type="password" class="form-control" placeholder="XXX" maxlength="3">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-outline-secondary" id="backToAmountBtn">Back</button>
+                                <button class="btn btn-primary" id="confirmPaymentBtn">Confirm Payment</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Confirmation -->
+                    <div class="card step-content" id="step3Content">
+                        <div class="card-header">
+                            <h5>Payment Successful</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="confirmation-icon success">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <h4 class="confirmation-title">Payment Successful!</h4>
+                            <p class="confirmation-message">Your wallet has been topped up with <span id="confirmationAmount">৳500</span>.</p>
+                            <div class="confirmation-details">
+                                <div class="confirmation-row">
+                                    <div class="confirmation-label">Transaction ID</div>
+                                    <div class="confirmation-value">MR-TX-2025061501</div>
+                                </div>
+                                <div class="confirmation-row">
+                                    <div class="confirmation-label">Date & Time</div>
+                                    <div class="confirmation-value">15 Jun 2025, 10:30 AM</div>
+                                </div>
+                                <div class="confirmation-row">
+                                    <div class="confirmation-label">Payment Method</div>
+                                    <div class="confirmation-value" id="confirmationMethod">bKash</div>
+                                </div>
+                                <div class="confirmation-row">
+                                    <div class="confirmation-label">New Balance</div>
+                                    <div class="confirmation-value" id="newBalanceValue">৳1,000</div>
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <a href="user-dashboard.html" class="btn btn-primary">Return to Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Transaction Summary -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Transaction Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="transaction-summary">
+                                <div class="transaction-row">
+                                    <div class="transaction-label">Amount</div>
+                                    <div class="transaction-value" id="summaryAmount">৳500</div>
+                                </div>
+                                <div class="transaction-row">
+                                    <div class="transaction-label">Fee</div>
+                                    <div class="transaction-value">৳0</div>
+                                </div>
+                                <div class="transaction-divider"></div>
+                                <div class="transaction-row total">
+                                    <div class="transaction-label">Total</div>
+                                    <div class="transaction-value" id="summaryTotal">৳500</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Help Card -->
+                    <div class="help-card">
+                        <h5>Need Help?</h5>
+                        <p>If you're having trouble adding balance to your account, please contact our support team.</p>
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-headset me-2"></i> Contact Support
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-logo">
+                        <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                        <span>Metro Rail BD</span>
+                    </div>
+                    <p>Bangladesh's first QR-based metro ticketing system, making urban transportation faster, easier, and more convenient for everyone.</p>
+                </div>
+                <div class="col-md-4 col-lg-2 mb-4">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">Metro Map</a></li>
+                        <li><a href="#">Fare Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-2 mb-4">
+                    <h5 class="mb-3">Support</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-4 mb-4">
+                    <h5 class="mb-3">Contact</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt me-2"></i> Agargaon, Dhaka</a></li>
+                        <li><a href="#"><i class="fas fa-phone me-2"></i> 16XXX</a></li>
+                        <li><a href="#"><i class="fas fa-envelope me-2"></i> info@metrorailbd.gov.bd</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Metro Rail BD. All rights reserved. A service of Bangladesh Government.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Initialize variables
+        const balanceAmount = document.getElementById('balanceAmount');
+        const amountPresetBtns = document.querySelectorAll('.amount-preset-btn');
+        const continueToPaymentBtn = document.getElementById('continueToPaymentBtn');
+        const backToAmountBtn = document.getElementById('backToAmountBtn');
+        const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+        const summaryAmount = document.getElementById('summaryAmount');
+        const summaryTotal = document.getElementById('summaryTotal');
+        const confirmationAmount = document.getElementById('confirmationAmount');
+        const confirmationMethod = document.getElementById('confirmationMethod');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const currentBalance = document.getElementById('currentBalance');
+        const newBalanceValue = document.getElementById('newBalanceValue');
+        
+        // Step indicators and content
+        const step1Indicator = document.getElementById('step1Indicator');
+        const step2Indicator = document.getElementById('step2Indicator');
+        const step3Indicator = document.getElementById('step3Indicator');
+        const step1Content = document.getElementById('step1Content');
+        const step2Content = document.getElementById('step2Content');
+        const step3Content = document.getElementById('step3Content');
+
+        // Update summary amount
+        function updateSummaryAmount() {
+            const amount = balanceAmount.value;
+            summaryAmount.textContent = `৳${amount}`;
+            summaryTotal.textContent = `৳${amount}`;
+            confirmationAmount.textContent = `৳${amount}`;
+            
+            // Calculate new balance
+            const currentBalanceValue = parseInt(currentBalance.textContent.replace('৳', ''));
+            const newBalance = currentBalanceValue + parseInt(amount);
+            newBalanceValue.textContent = `৳${newBalance.toLocaleString()}`;
+        }
+
+        // Amount preset buttons
+        amountPresetBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                amountPresetBtns.forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                const amount = this.getAttribute('data-amount');
+                balanceAmount.value = amount;
+                updateSummaryAmount();
+            });
+        });
+
+        // Amount input change
+        balanceAmount.addEventListener('input', function() {
+            // Remove active class from all preset buttons
+            amountPresetBtns.forEach(btn => btn.classList.remove('active'));
+            
+            // Find and activate matching preset button if exists
+            const amount = this.value;
+            const matchingBtn = document.querySelector(`.amount-preset-btn[data-amount="${amount}"]`);
+            if (matchingBtn) {
+                matchingBtn.classList.add('active');
+            }
+            
+            updateSummaryAmount();
+        });
+
+        // Continue to payment button
+        continueToPaymentBtn.addEventListener('click', function() {
+            // Validate amount
+            const amount = parseInt(balanceAmount.value);
+            if (isNaN(amount) || amount < 100 || amount > 10000) {
+                alert('Please enter an amount between ৳100 and ৳10,000');
+                return;
+            }
+            
+            // Update step indicators
+            step1Indicator.classList.remove('active');
+            step1Indicator.classList.add('completed');
+            step2Indicator.classList.add('active');
+            
+            // Show step 2 content, hide step 1
+            step1Content.classList.remove('active');
+            step2Content.classList.add('active');
+        });
+
+        // Back to amount button
+        backToAmountBtn.addEventListener('click', function() {
+            // Update step indicators
+            step2Indicator.classList.remove('active');
+            step1Indicator.classList.remove('completed');
+            step1Indicator.classList.add('active');
+            
+            // Show step 1 content, hide step 2
+            step2Content.classList.remove('active');
+            step1Content.classList.add('active');
+        });
+
+        // Payment method selection
+        paymentMethods.forEach(method => {
+            method.addEventListener('click', function() {
+                // Remove active class from all methods
+                paymentMethods.forEach(m => m.classList.remove('active'));
+                
+                // Add active class to clicked method
+                this.classList.add('active');
+                
+                // Show corresponding payment details
+                const selectedMethod = this.getAttribute('data-method');
+                document.getElementById('bkashDetails').style.display = 'none';
+                document.getElementById('nagadDetails').style.display = 'none';
+                document.getElementById('rocketDetails').style.display = 'none';
+                document.getElementById('cardDetails').style.display = 'none';
+                document.getElementById(`${selectedMethod}Details`).style.display = 'block';
+                
+                // Update confirmation method
+                confirmationMethod.textContent = this.querySelector('.payment-method-name').textContent;
+            });
+        });
+
+        // Confirm payment button
+        confirmPaymentBtn.addEventListener('click', function() {
+            // Update step indicators
+            step2Indicator.classList.remove('active');
+            step2Indicator.classList.add('completed');
+            step3Indicator.classList.add('active');
+            
+            // Show step 3 content, hide step 2
+            step2Content.classList.remove('active');
+            step3Content.classList.add('active');
+            
+            // Update current balance in header (this would normally come from the server)
+            const amount = parseInt(balanceAmount.value);
+            const currentBalanceValue = parseInt(currentBalance.textContent.replace('৳', ''));
+            const newBalance = currentBalanceValue + amount;
+            currentBalance.textContent = `৳${newBalance}`;
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSummaryAmount();
+        });
+    </script>
+</body>
+</html>

@@ -4,6 +4,7 @@
     --dark-color: #333333;
     --light-color: #f8f9fa;
     --gray-color: #6c757d;
+    --gray-light: #e9ecef;
     --success-color: #28a745;
     --warning-color: #ffc107;
     --danger-color: #dc3545;
@@ -137,7 +138,7 @@ body {
 
 /* Common Design */
 .taka-icon {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 400;
 }
 

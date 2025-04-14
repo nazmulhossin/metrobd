@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Balance - Bangladesh Metro Rail QR Ticketing System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #006a4e; /* Bangladesh flag green */
+            --secondary-color: #f42a41; /* Bangladesh flag red */
+            --accent-color: #ffb81c; /* Gold accent */
+            --dark-color: #333333;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: var(--dark-color);
+        }
+
+        /* Header Styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .navbar-brand span {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-left: 8px;
+        }
+
+        .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .balance-pill {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            font-weight: 600;
+            border: 1px solid var(--primary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+        }
+
+        /* Main Content */
+        .main-container {
+            padding: 30px 0;
+            min-height: calc(100vh - 76px - 100px);
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb-item a {
+            color: var(--gray-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--primary-color);
+        }
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Form Styles */
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 106, 78, 0.25);
+        }
+
+        .amount-input-wrapper {
+            position: relative;
+        }
+
+        .amount-currency {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 500;
+        }
+
+        .amount-input {
+            padding-left: 30px;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .amount-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .amount-preset-btn {
+            background-color: var(--light-color);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .amount-preset-btn:hover {
+            background-color: rgba(0, 106, 78, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .form-info {
+            background-color: rgba(23, 162, 184, 0.1);
+            color: #17a2b8;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .form-info i {
+            margin-right: 8px;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .payment-method {
+            background-color: var(--light-color);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            background-color: rgba(0, 106, 78, 0.1);
+        }
+
+        .payment-method.active {
+            border-color: var(--primary-color);
+            background-color: rgba(0, 106, 78, 0.1);
+        }
+
+        .payment-method-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.2rem;
+        }
+
+        .payment-method-icon.bkash {
+            background-color: rgba(226, 19, 110, 0.1);
+            color: #e2136e;
+        }
+
+        .payment-method-icon.nagad {
+            background-color: rgba(244, 42, 65, 0.1);
+            color: #f42a41;
+        }
+
+        .payment-method-icon.rocket {
+            background-color: rgba(140, 52, 148, 0.1);
+            color: #8c3494;
+        }
+
+        .payment-method-icon.card {
+            background-color: rgba(26, 31, 113, 0.1);
+            color: #1a1f71;
+        }
+
+        .payment-method-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* Transaction Summary */
+        .transaction-summary {
+            background-color: var(--light-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .transaction-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .transaction-label {
+            color: var(--gray-color);
+        }
+
+        .transaction-value {
+            font-weight: 500;
+        }
+
+        .transaction-divider {
+            height: 1px;
+            background-color: #ddd;
+            margin: 8px 0;
+        }
+
+        .transaction-row.total {
+            font-weight: 700;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: #005a42;
+            border-color: #005a42;
+        }
+
+        .btn-outline-secondary {
+            border-color: var(--gray-color);
+            color: var(--gray-color);
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--gray-color);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 30px 0;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo img {
+            height: 40px;
+        }
+
+        .footer-logo span {
+            font-weight: 700;
+            color: white;
+            margin-left: 8px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 767.98px) {
+            .payment-methods {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .amount-presets {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="user-dashboard.html">
+                <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                <span>Metro Rail BD</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="user-dashboard.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Add Balance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My Tickets</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="#">
+                            <span class="balance-pill">
+                                <i class="fas fa-wallet me-1"></i> ৳500
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://via.placeholder.com/30x30" alt="User" class="rounded-circle" width="30" height="30">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> My Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="page-title">Add Balance</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="user-dashboard.html">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add Balance</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Step 1: Amount Selection -->
+                    <div class="card" id="amountCard">
+                        <div class="card-header">
+                            <h5 class="mb-0">Step 1: Enter Amount</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="balanceAmount" class="form-label">Enter Amount (৳)</label>
+                                <div class="amount-input-wrapper">
+                                    <span class="amount-currency">৳</span>
+                                    <input type="number" class="form-control amount-input" id="balanceAmount" placeholder="0" min="100" max="10000" value="500">
+                                </div>
+                            </div>
+                            <div class="amount-presets">
+                                <button class="amount-preset-btn" data-amount="100">৳100</button>
+                                <button class="amount-preset-btn" data-amount="200">৳200</button>
+                                <button class="amount-preset-btn" data-amount="500">৳500</button>
+                                <button class="amount-preset-btn" data-amount="1000">৳1000</button>
+                            </div>
+                            <div class="form-info">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Minimum ৳100, Maximum ৳10,000 per transaction</span>
+                            </div>
+                            <button class="btn btn-primary" id="continueToPaymentBtn">Continue to Payment</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Payment Method -->
+                    <div class="card" id="paymentCard" style="display: none;">
+                        <div class="card-header">
+                            <h5 class="mb-0">Step 2: Select Payment Method</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Select Payment Method</label>
+                                <div class="payment-methods">
+                                    <div class="payment-method active" data-method="bkash">
+                                        <div class="payment-method-icon bkash">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="payment-method-name">bKash</div>
+                                    </div>
+                                    <div class="payment-method" data-method="nagad">
+                                        <div class="payment-method-icon nagad">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="payment-method-name">Nagad</div>
+                                    </div>
+                                    <div class="payment-method" data-method="rocket">
+                                        <div class="payment-method-icon rocket">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="payment-method-name">Rocket</div>
+                                    </div>
+                                    <div class="payment-method" data-method="card">
+                                        <div class="payment-method-icon card">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <div class="payment-method-name">Card</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-details" id="bkashDetails">
+                                <div class="mb-3">
+                                    <label class="form-label">bKash Number</label>
+                                    <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                                </div>
+                            </div>
+                            
+                            <div class="payment-details" id="nagadDetails" style="display: none;">
+                                <div class="mb-3">
+                                    <label class="form-label">Nagad Number</label>
+                                    <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                                </div>
+                            </div>
+                            
+                            <div class="payment-details" id="rocketDetails" style="display: none;">
+                                <div class="mb-3">
+                                    <label class="form-label">Rocket Number</label>
+                                    <input type="tel" class="form-control" placeholder="01XXXXXXXXX" maxlength="11">
+                                </div>
+                            </div>
+                            
+                            <div class="payment-details" id="cardDetails" style="display: none;">
+                                <div class="mb-3">
+                                    <label class="form-label">Card Number</label>
+                                    <input type="text" class="form-control" placeholder="XXXX XXXX XXXX XXXX" maxlength="19">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Expiry Date</label>
+                                        <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">CVV</label>
+                                        <input type="password" class="form-control" placeholder="XXX" maxlength="3">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-outline-secondary" id="backToAmountBtn">Back</button>
+                                <button class="btn btn-primary" id="confirmPaymentBtn">Confirm Payment</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Confirmation -->
+                    <div class="card" id="confirmationCard" style="display: none;">
+                        <div class="card-header">
+                            <h5 class="mb-0">Payment Successful</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="mb-4">
+                                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                            </div>
+                            <h4 class="mb-3">Payment Successful!</h4>
+                            <p class="mb-4">Your wallet has been topped up with <span id="confirmationAmount">৳500</span>.</p>
+                            <div class="transaction-summary mb-4">
+                                <div class="transaction-row">
+                                    <div class="transaction-label">Transaction ID</div>
+                                    <div class="transaction-value">MR-TX-2025061501</div>
+                                </div>
+                                <div class="transaction-row">
+                                    <div class="transaction-label">Date & Time</div>
+                                    <div class="transaction-value">15 Jun 2025, 10:30 AM</div>
+                                </div>
+                                <div class="transaction-row">
+                                    <div class="transaction-label">Payment Method</div>
+                                    <div class="transaction-value" id="confirmationMethod">bKash</div>
+                                </div>
+                                <div class="transaction-row">
+                                    <div class="transaction-label">New Balance</div>
+                                    <div class="transaction-value">৳1,000</div>
+                                </div>
+                            </div>
+                            <a href="user-dashboard.html" class="btn btn-primary">Return to Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Transaction Summary -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Transaction Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="transaction-summary">
+                                <div class="transaction-row">
+                                    <div class="transaction-label">Amount</div>
+                                    <div class="transaction-value" id="summaryAmount">৳500</div>
+                                </div>
+                                <div class="transaction-row">
+                                    <div class="transaction-label">Fee</div>
+                                    <div class="transaction-value">৳0</div>
+                                </div>
+                                <div class="transaction-divider"></div>
+                                <div class="transaction-row total">
+                                    <div class="transaction-label">Total</div>
+                                    <div class="transaction-value" id="summaryTotal">৳500</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Help Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Need Help?</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>If you're having trouble adding balance to your account, please contact our support team.</p>
+                            <div class="d-grid">
+                                <a href="#" class="btn btn-outline-secondary">
+                                    <i class="fas fa-headset me-2"></i> Contact Support
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-logo">
+                        <img src="https://via.placeholder.com/40x40" alt="Metro Rail BD Logo">
+                        <span>Metro Rail BD</span>
+                    </div>
+                    <p>Bangladesh's first QR-based metro ticketing system, making urban transportation faster, easier, and more convenient for everyone.</p>
+                </div>
+                <div class="col-md-4 col-lg-2 mb-4">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">Metro Map</a></li>
+                        <li><a href="#">Fare Calculator</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-2 mb-4">
+                    <h5 class="mb-3">Support</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-lg-4 mb-4">
+                    <h5 class="mb-3">Contact</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt me-2"></i> Agargaon, Dhaka</a></li>
+                        <li><a href="#"><i class="fas fa-phone me-2"></i> 16XXX</a></li>
+                        <li><a href="#"><i class="fas fa-envelope me-2"></i> info@metrorailbd.gov.bd</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Metro Rail BD. All rights reserved. A service of Bangladesh Government.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Initialize variables
+        const amountCard = document.getElementById('amountCard');
+        const paymentCard = document.getElementById('paymentCard');
+        const confirmationCard = document.getElementById('confirmationCard');
+        const balanceAmount = document.getElementById('balanceAmount');
+        const amountPresetBtns = document.querySelectorAll('.amount-preset-btn');
+        const continueToPaymentBtn = document.getElementById('continueToPaymentBtn');
+        const backToAmountBtn = document.getElementById('backToAmountBtn');
+        const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+        const summaryAmount = document.getElementById('summaryAmount');
+        const summaryTotal = document.getElementById('summaryTotal');
+        const confirmationAmount = document.getElementById('confirmationAmount');
+        const confirmationMethod = document.getElementById('confirmationMethod');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const paymentDetails = document.querySelectorAll('.payment-details');
+
+        // Update summary amount
+        function updateSummaryAmount() {
+            const amount = balanceAmount.value;
+            summaryAmount.textContent = `৳${amount}`;
+            summaryTotal.textContent = `৳${amount}`;
+            confirmationAmount.textContent = `৳${amount}`;
+        }
+
+        // Amount preset buttons
+        amountPresetBtns.forEach(btn => {
+            btn.addEventListener('click',
